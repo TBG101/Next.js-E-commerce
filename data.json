@@ -1,0 +1,120 @@
+{
+    "products": [
+        {
+            "id": 1,
+            "name": "Fall Limited Edition Sneakers",
+            "price": 250,
+            "description": "These low-profile sneakers are perfect casual wear companion. Featuring a durable rubber outer sole, they'll withstand everything the weather can offer",
+            "images": [
+                "images/image-product-1.jpg",
+                "images/image-product-2.jpg",
+                "images/image-product-3.jpg",
+                "images/image-product-4.jpg"
+            ],
+            "thumbnails": [
+                "images/image-product-1-thumbnail.jpg",
+                "images/image-product-2-thumbnail.jpg",
+                "images/image-product-3-thumbnail.jpg",
+                "images/image-product-4-thumbnail.jpg"
+            ],
+            "sex": "unisex"
+        },
+        {
+            "id": 2,
+            "name": "Winter Limited Edition Boots",
+            "price": 300,
+            "description": "These boots are perfect for winter. Featuring a durable rubber outer sole and warm lining, they'll keep your feet warm and dry.",
+            "images": [
+                "images/image-product-1.jpg",
+                "images/image-product-2.jpg",
+                "images/image-product-3.jpg",
+                "images/image-product-4.jpg"
+            ],
+            "thumbnails": [
+                "images/image-product-1-thumbnail.jpg",
+                "images/image-product-2-thumbnail.jpg",
+                "images/image-product-3-thumbnail.jpg",
+                "images/image-product-4-thumbnail.jpg"
+            ],
+            "sex": "male"
+        },
+        {
+            "id": 3,
+            "name": "Spring Limited Edition Loafers",
+            "price": 200,
+            "description": "These loafers are perfect for spring. Featuring a lightweight design and breathable material, they'll keep your feet comfortable all day long.",
+            "images": [
+                "images/image-product-1.jpg",
+                "images/image-product-2.jpg",
+                "images/image-product-3.jpg",
+                "images/image-product-4.jpg"
+            ],
+            "thumbnails": [
+                "images/image-product-1-thumbnail.jpg",
+                "images/image-product-2-thumbnail.jpg",
+                "images/image-product-3-thumbnail.jpg",
+                "images/image-product-4-thumbnail.jpg"
+            ],
+            "sex": "female"
+        },
+        {
+            "id": 4,
+            "name": "Summer Limited Edition Sandals",
+            "price": 150,
+            "description": "These sandals are perfect for summer. Featuring a comfortable design and durable material, they'll keep your feet cool and comfortable.",
+            "images": [
+                "images/image-product-1.jpg",
+                "images/image-product-2.jpg",
+                "images/image-product-3.jpg",
+                "images/image-product-4.jpg"
+            ],
+            "thumbnails": [
+                "images/image-product-1-thumbnail.jpg",
+                "images/image-product-2-thumbnail.jpg",
+                "images/image-product-3-thumbnail.jpg",
+                "images/image-product-4-thumbnail.jpg"
+            ],
+            "sex": "female"
+        },
+        {
+            "id": 5,
+            "name": "Autumn Limited Edition Moccasins",
+            "price": 220,
+            "description": "These moccasins are perfect for autumn. Featuring a soft interior and sturdy exterior, they'll keep your feet comfortable and stylish.",
+            "images": [
+                "images/image-product-1.jpg",
+                "images/image-product-2.jpg",
+                "images/image-product-3.jpg",
+                "images/image-product-4.jpg"
+            ],
+            "thumbnails": [
+                "images/image-product-1-thumbnail.jpg",
+                "images/image-product-2-thumbnail.jpg",
+                "images/image-product-3-thumbnail.jpg",
+                "images/image-product-4-thumbnail.jpg"
+            ],
+            "sex": "unisex"
+        },
+        {
+            "id": 6,
+            "name": "Rainy Season Limited Edition Boots",
+            "price": 280,
+            "description": "These boots are perfect for the rainy season. Featuring a waterproof design and non-slip sole, they'll keep your feet dry and safe.",
+            "images": [
+                "images/image-product-1.jpg",
+                "images/image-product-2.jpg",
+                "images/image-product-3.jpg",
+                "images/image-product-4.jpg"
+            ],
+            "thumbnails": [
+                "images/image-product-1-thumbnail.jpg",
+                "images/image-product-2-thumbnail.jpg",
+                "images/image-product-3-thumbnail.jpg",
+                "images/image-product-4-thumbnail.jpg"
+            ],
+            "sex": "male"
+        }
+    ],
+    "discount": 0.50,
+    "cart": []
+}
