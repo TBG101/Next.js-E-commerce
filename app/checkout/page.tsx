@@ -21,14 +21,14 @@ function Checkout() {
   const [zip, setZip] = React.useState("");
   const [country, setCountry] = React.useState("");
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
   return (
-    <main className="flex h-full items-center justify-center">
+    <main className="flex h-full items-center justify-center pt-2">
       <div className=" flex h-full w-full min-w-[0] flex-col items-center justify-center gap-4  pt-4 md:min-w-[375px] md:gap-12 xl:w-full xl:max-w-full xl:flex-row  xl:items-start 2xl:gap-16">
         <section className=" flex h-full w-full max-w-[400px]  flex-col items-start justify-center gap-4 rounded-lg border-1 bg-white px-4  py-4 shadow-lg xl:max-w-[800px] xl:px-8">
           <h1 className=" text-center text-2xl font-bold text-gray-800 xl:text-4xl">
@@ -166,7 +166,7 @@ function Checkout() {
             <Button
               color="primary"
               type="submit"
-              onSubmit={() => {}}
+              onSubmit={() => { }}
               className="w-full text-lg font-medium tracking-wide text-secondary-foreground"
             >
               Checkout

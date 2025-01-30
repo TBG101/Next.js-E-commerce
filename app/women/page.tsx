@@ -1,4 +1,5 @@
 "use client";
+
 import { getProducts } from "@/apiqueries/apiqueries";
 import React, { useEffect } from "react";
 import Loading from "../components/Loading";

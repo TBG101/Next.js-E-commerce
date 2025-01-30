@@ -25,7 +25,7 @@ import { ThemeSwitcher } from "./ThemeSwitcher";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import SearchInput from "./SearchInput";
-
+import { useSession, signOut } from "next-auth/react";
 type CartItem = {
   id: number;
   name: string;
@@ -40,6 +40,7 @@ function Navbar() {
   const menuItems = ["Men", "Women", "About", "Contact"];
   const pathname = usePathname();
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const activeMenuItem = menuItems.find((item) =>
@@ -199,6 +200,7 @@ function Navbar() {
             <span className="hidden md:flex">
               <SearchInput />
             </span>
+
             <Dropdown>
               <DropdownTrigger>
                 <div className="relative cursor-pointer">
@@ -282,19 +284,69 @@ function Navbar() {
                 )}
               </DropdownMenu>
             </Dropdown>
-            <div className="flex w-7 items-center justify-center transition-all duration-300 ease-in-out md:w-10">
-              <Avatar
-                as="button"
-                className="bg-transparent transition-transform"
-                name="Jason Hughes"
-                size="sm"
-                alt="image-avatar"
-                src="/images/image-avatar.png"
-              />
-            </div>
-            <div className="hidden md:flex">
+
+            <Dropdown
+
+            >
+              <DropdownTrigger>
+                <div className="flex w-7 items-center justify-center transition-all duration-300 ease-in-out md:w-10">
+                  <Avatar
+                    as="button"
+                    className="bg-transparent transition-transform"
+                    name="Jason Hughes"
+                    size="sm"
+                    alt="image-avatar"
+                    src="/images/image-avatar.png"
+                  />
+                </div>
+              </DropdownTrigger>
+              {session && session.user && status === "authenticated" && (
+                <DropdownMenu className="bg-none">
+                  <DropdownItem key="profile" className="h-14 gap-2">
+                    <p className="tracking-widest">Welcome <span className="font-medium">{session.user.name}</span>!</p>
+                  </DropdownItem>
+                  <DropdownItem key="profile" className="h-14 gap-2">
+                    <p className="tracking-widest">Settings</p>
+                  </DropdownItem>
+                  <DropdownItem key="profile" className="h-14 gap-2">
+                    <p className="tracking-widest" >
+                      <Link
+                        href={""}
+                        onClick={() => {
+                          signOut();
+                        }}
+                      >
+                        Log out
+                      </Link>
+                    </p>
+                  </DropdownItem>
+                </DropdownMenu>
+              )}
+
+
+              {!session && <DropdownMenu className="bg-none"
+
+              >
+                <DropdownItem>
+                  <Button
+                    className="w-full bg-primary-orange text-white">
+                    Login
+                  </Button>
+                </DropdownItem>
+                <DropdownItem>
+                  <Button
+                    className="w-full bg-primary-orange text-white">
+                    Sign up
+                  </Button>
+                </DropdownItem>
+
+
+              </DropdownMenu>}
+            </Dropdown>
+            {/* <div className="hidden md:flex">
+
               <ThemeSwitcher />
-            </div>
+            </div> */}
           </NavbarContent>
           <NavbarMenu className="w-2/3 border-1 font-bold shadow-lg ">
             <span className="pt-[40px]">
@@ -323,7 +375,7 @@ function Navbar() {
           <SearchInput />
         </span>
       </div>
-    </Nav>
+    </Nav >
   );
 }
 

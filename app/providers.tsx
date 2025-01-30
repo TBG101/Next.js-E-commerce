@@ -84,9 +84,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <NextUIProvider>
-      <NextThemesProvider attribute="class" defaultTheme="system">
+      <NextThemesProvider attribute="class" defaultTheme="light">
         <CartContext.Provider value={{ cart, addToCart, deleteFromCart }}>
-          {children}
+            {children}
         </CartContext.Provider>
       </NextThemesProvider>
     </NextUIProvider>
