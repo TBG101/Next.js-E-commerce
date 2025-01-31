@@ -328,16 +328,20 @@ function Navbar() {
 
               >
                 <DropdownItem>
-                  <Button
-                    className="w-full bg-primary-orange text-white">
-                    Login
-                  </Button>
+                  <Link href={"/login"}>
+                    <Button
+                      className="w-full bg-primary-orange text-white">
+                      Login
+                    </Button>
+                  </Link>
                 </DropdownItem>
                 <DropdownItem>
-                  <Button
-                    className="w-full bg-primary-orange text-white">
-                    Sign up
-                  </Button>
+                  <Link href="/register">
+                    <Button
+                      className="w-full bg-primary-orange text-white">
+                      Sign up
+                    </Button>
+                  </Link>
                 </DropdownItem>
 
 

@@ -7,7 +7,7 @@ export default function ProtectedPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  if (status === 'loading') return <div>Loading...</div>;
+  if (status === 'loading' ) return <div>Loading...</div>;
   if (!session) router.push('/login');
 
   return (

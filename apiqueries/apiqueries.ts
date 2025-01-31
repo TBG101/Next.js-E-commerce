@@ -56,3 +56,16 @@ export async function searchProducts(search: string) {
   else
     throw new Error(result.message);
 }
+
+export async function registerAccount(email: string, password: string, name: string) {
+  const response = await fetch('/api/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password, name }),
+  });
+  const result = await response.json();
+  if (response.ok)
+    return result;
+  else
+    throw new Error(result.message);
+}

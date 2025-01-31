@@ -4,9 +4,9 @@ import dbConnect from '@/lib/dbConnect';
 
 export async function POST(request: Request) {
   await dbConnect();
-  
+
   const { email, password, name } = await request.json();
-  
+
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
     const user = new User({ email, password, name });
     await user.save();
-    
+
     return NextResponse.json(
       { message: 'User created successfully' },
       { status: 201 }
