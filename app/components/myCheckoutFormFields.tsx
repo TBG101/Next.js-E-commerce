@@ -18,9 +18,7 @@ function MyCheckoutFormFields({
 
   return (
     <div className="flex w-full flex-col items-start justify-center">
-      <label htmlFor="name" className="mb-1 ml-1 text-sm text-gray-800 ">
-        {name.charAt(0).toUpperCase() + name.slice(1)}
-      </label>
+
       <Input
         isRequired
         value={value}
@@ -45,10 +43,21 @@ function MyCheckoutFormFields({
         type={type}
         name={name}
         id={name}
+        label={name.charAt(0).toUpperCase() + name.slice(1)}  
+        labelPlacement="outside"
         placeholder={placeholder}
         radius="sm"
         classNames={{
-       
+          inputWrapper: [
+            "border-1",
+            "dark:bg-default/60",
+            "dark:border-default/60",
+            "hover:bg-default-200/70",
+            "dark:hover:bg-default/70",
+            "group-data-[focus=true]:bg-default-200/50",
+            "dark:group-data-[focus=true]:bg-default/60",
+            "!cursor-text",
+          ],
         }}
       />
     </div>

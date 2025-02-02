@@ -3,14 +3,9 @@
 import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import React, { useState, createContext, useEffect } from "react";
-import { getCart } from "@/apiqueries/apiqueries";
-type CartItem = {
-  id: number;
-  name: string;
-  quantity: number;
-  price: number;
-  image: string;
-};
+import { CartItem } from "@/lib/types";
+
+
 export const CartContext = createContext<any>(null);
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -42,10 +37,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
   };
 
   const addToCart = async (item: CartItem) => {
-    // Optimistically update the cart
-    if (item.quantity < 1) {
-      return;
-    }
 
     setCart((prevCart) => {
       // Check if the item already exists in the cart
@@ -55,12 +46,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
         // If the item already exists, return a new array where the existing item's quantity is updated
         const newCart = prevCart.map((cartItem) =>
           cartItem.id === item.id
-            ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
+            ? { ...cartItem, quantity: (cartItem.quantity + item.quantity) < 0 ? 0 : cartItem.quantity + item.quantity }
             : cartItem,
         );
         localStorage.setItem("cart", JSON.stringify(newCart));
         return newCart;
       } else {
+        if (item.quantity < 1) {
+          return prevCart;
+        }
         // If the item doesn't exist, add the new item to the cart
         const newCart = [...prevCart, item];
         localStorage.setItem("cart", JSON.stringify(newCart));
@@ -86,9 +80,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <NextUIProvider>
       <NextThemesProvider attribute="class" defaultTheme="light">
         <CartContext.Provider value={{ cart, addToCart, deleteFromCart }}>
-            {children}
+          {children}
         </CartContext.Provider>
       </NextThemesProvider>
     </NextUIProvider>
   );
 }
+

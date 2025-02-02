@@ -80,6 +80,7 @@ export default function Page({ params }: { params: { slug: string } }) {
       try {
         const apidata = await getProduct(params.slug);
         const currentPrice = apidata.price * apidata.discount;
+
         setData({ ...apidata, currentPrice });
         setIsLoading(false);
       } catch (error) {
@@ -89,7 +90,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     fetchData();
   }, [params.slug]);
-  
+
   const addHandler = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
   };

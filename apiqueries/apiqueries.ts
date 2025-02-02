@@ -1,5 +1,7 @@
-export async function getProduct(slug: string) {
-  const res = await fetch(`/api/products/${slug}`, {
+import { CheckoutFields } from "@/lib/types";
+
+export async function getProductByID(id: number) {
+  const res = await fetch(`/api/products/id?id=${id}`, {
     method: "GET",
     cache: "no-cache",
   });
@@ -8,8 +10,8 @@ export async function getProduct(slug: string) {
   return result;
 }
 
-export async function getCart() {
-  const res = await fetch(`/api/cart`, {
+export async function getProduct(slug: string) {
+  const res = await fetch(`/api/products/${slug}`, {
     method: "GET",
     cache: "no-cache",
   });
@@ -69,3 +71,36 @@ export async function registerAccount(email: string, password: string, name: str
   else
     throw new Error(result.message);
 }
+
+export async function sendCheckout(checkout: CheckoutFields) {
+  try {
+    const response = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(checkout),
+    });
+
+    if (!response.ok) {
+      const errorResult = await response.json();
+      throw new Error(errorResult.message || 'An error occurred during the checkout process.');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error in sendCheckout:', error);
+    throw new Error('Failed to complete checkout. Please try again later.');
+  }
+}
+
+export async function getOrder(order_id: string) {
+  const res = await fetch(`/api/order/${order_id}`, {
+    method: "GET",
+    cache: "no-cache",
+  });
+
+  const result = await res.json();
+  if (res.ok)
+    return result;
+  else
+    throw new Error(result.message);
+} 

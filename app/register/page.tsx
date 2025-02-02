@@ -13,6 +13,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -62,7 +63,11 @@ export default function RegisterPage() {
             classNames={{
               inputWrapper: 'w-full rounded-md border border-gray-300',
             }} />
-          <Button type='submit' color='primary' className='text-neutral-50 tracking-wide text-medium font-semibold rounded-md'>
+          <Button
+            isLoading={loading || success}
+            disabled={loading || success}
+            type='submit' color={success ? "success" : "primary"} className='text-neutral-50 tracking-wide text-medium font-semibold rounded-md'
+          >
             {loading ? "loading" : 'Register'}
           </Button>
           <Link href='/login' className='text-neutral-600 text-sm text-center pt-1 transition duration-300 ease-in-out hover:underline hover:font-medium'>

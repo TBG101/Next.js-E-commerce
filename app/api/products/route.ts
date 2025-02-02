@@ -1,19 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
-import data from '@/data.json'
+import productModel from '@/models/productModel';
 
 export async function GET(req: NextRequest, res: NextResponse) {
     try {
         const searchParams = req.nextUrl.searchParams
 
         const maxProducts = searchParams.get('maxProducts');
-        const maxProductsNumber = maxProducts ? parseInt(maxProducts) : data.products.length;
-        let products = data.products.slice(0, maxProductsNumber);
+
+
+        const maxProductsNumber = maxProducts ? parseInt(maxProducts) : 20;
+
+        let products = await productModel.find().limit(maxProductsNumber);
 
         const sex = searchParams.get('sex');
 
         if (!sex)
             return NextResponse.json({ products });
-
 
         if (sex === "male") {
             products = products.filter((product) => {
@@ -26,7 +28,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
         }
 
         const response = { products };
-
         return NextResponse.json(response)
     } catch (error) {
         return NextResponse.json(error)

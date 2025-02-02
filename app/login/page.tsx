@@ -10,6 +10,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -25,16 +26,25 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
-    const result = await signIn('credentials', {
-      redirect: true,
-      email,
-      password,
-      callbackUrl: "/",
-    });
+    try {
+      const result = await signIn('credentials', {
+        redirect: true,
+        email,
+        password,
+        callbackUrl: "/",
+      });
 
-    if (result?.error) {
+      if (result?.error) {
+        setLoading(false);
+        setError(result.error);
+      } else {
+        setLoading(false);
+        setSuccess(true);
+        router.push('/');
+      }
+    } catch (e: any) {
       setLoading(false);
-      setError(result.error);
+      setError(e.message);
     }
   };
 
@@ -58,7 +68,9 @@ export default function LoginPage() {
               inputWrapper: 'w-full rounded-md border border-gray-300',
             }} />
 
-          <Button type='submit' color='primary' className='text-neutral-50 tracking-wide text-medium font-semibold rounded-md' >
+          <Button disabled={loading || success} isLoading={loading || success}
+
+            type='submit' color={success ? "success" : 'primary'} className='text-neutral-50 tracking-wide text-medium font-semibold rounded-md' >
             {loading ? "loading" : 'Login'}
           </Button>
 

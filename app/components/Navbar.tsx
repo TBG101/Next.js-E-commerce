@@ -26,6 +26,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import SearchInput from "./SearchInput";
 import { useSession, signOut } from "next-auth/react";
+import { FaRegCircleUser } from "react-icons/fa6";
 type CartItem = {
   id: number;
   name: string;
@@ -33,10 +34,11 @@ type CartItem = {
   price: number;
   image: string;
 };
+
 function Navbar() {
+  const { cart, addToCart, deleteFromCart } = useContext(CartContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("");
-  const { cart, addToCart, deleteFromCart } = useContext(CartContext);
   const menuItems = ["Men", "Women", "About", "Contact"];
   const pathname = usePathname();
   const router = useRouter();
@@ -296,19 +298,20 @@ function Navbar() {
                     name="Jason Hughes"
                     size="sm"
                     alt="image-avatar"
-                    src="/images/image-avatar.png"
-                  />
+                    fallback={<FaRegCircleUser size={24} />}
+                  >
+                  </Avatar>
                 </div>
               </DropdownTrigger>
               {session && session.user && status === "authenticated" && (
-                <DropdownMenu className="bg-none">
-                  <DropdownItem key="profile" className="h-14 gap-2">
+                <DropdownMenu className="bg-none" variant="light">
+                  <DropdownItem key="profile" className="pb-2 gap-2" >
                     <p className="tracking-widest">Welcome <span className="font-medium">{session.user.name}</span>!</p>
                   </DropdownItem>
-                  <DropdownItem key="profile" className="h-14 gap-2">
+                  <DropdownItem key="profile" className="pb-2 gap-2">
                     <p className="tracking-widest">Settings</p>
                   </DropdownItem>
-                  <DropdownItem key="profile" className="h-14 gap-2">
+                  <DropdownItem key="profile" className="gap-2">
                     <p className="tracking-widest" >
                       <Link
                         href={""}
@@ -327,7 +330,7 @@ function Navbar() {
               {!session && <DropdownMenu className="bg-none"
 
               >
-                <DropdownItem>
+                <DropdownItem >
                   <Link href={"/login"}>
                     <Button
                       className="w-full bg-primary-orange text-white">
