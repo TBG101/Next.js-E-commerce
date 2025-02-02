@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import data from "@/data.json";
 import { Providers } from "../providers";
 
 export const metadata: Metadata = {

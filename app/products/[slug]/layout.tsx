@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import data from "@/data.json";
 
 export const metadata: Metadata = {
   title: "Product",

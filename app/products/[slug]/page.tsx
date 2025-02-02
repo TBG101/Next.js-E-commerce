@@ -6,7 +6,6 @@ import { Image, Button, useDisclosure } from "@nextui-org/react";
 import { originalPathname } from "next/dist/build/templates/app-page";
 import { motion, AnimatePresence, wrap } from "framer-motion";
 import Loading from "@/app/components/Loading";
-import data from "@/data.json";
 import { CartContext } from "@/app/providers";
 import Lightbox from "@/app/components/Lightbox";
 

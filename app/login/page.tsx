@@ -1,46 +1,56 @@
-'use client';
-import { Button, Input } from '@nextui-org/react';
-import { signIn, useSession } from 'next-auth/react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import Loading from '../components/Loading';
+"use client";
+
+import { Button, Input } from "@nextui-org/react";
+import { signIn, useSession } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import Loading from "../components/Loading";
+import { CiUser } from "react-icons/ci";
+import PasswordInput from "../components/passwordInput";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  if (status === 'loading') return <Loading />;
-  if (session && status === 'authenticated') {
-    router.push('/');
+  if (status === "loading") return <Loading />;
+  if (session && status === "authenticated") {
+    router.push("/");
     return <Loading />;
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const result = await signIn('credentials', {
-        redirect: true,
+      const result = await signIn("credentials", {
+        redirect: false,
         email,
         password,
-        callbackUrl: "/",
       });
 
       if (result?.error) {
+        if (result.error === "No user found") {
+          setError("No user found with this email");
+        } else if (result.error === "Invalid password") {
+          setError("Invalid password");
+        } else {
+          setError(result.error);
+        }
+
         setLoading(false);
-        setError(result.error);
-      } else {
+        console.log(result);
+      } else if (result?.ok) {
         setLoading(false);
         setSuccess(true);
-        router.push('/');
+        router.push("/");
       }
     } catch (e: any) {
       setLoading(false);
@@ -49,44 +59,69 @@ export default function LoginPage() {
   };
 
   return (
-    <section className='flex-grow w-screen flex justify-center items-center'>
-      <div className='w-96 p-8 bg-white rounded-lg shadow-lg space-y-4 border-1 border-neutral-600 border-opacity-30'>
+    <section className="flex w-screen flex-grow items-center justify-center">
+      <div className="w-96 space-y-4 rounded-lg border-1 border-neutral-600 border-opacity-30 bg-white p-8 shadow-lg">
+        <h1 className="text-center text-2xl font-bold tracking-widest text-neutral-800">
+          Login
+        </h1>
 
-        <h1 className='text-2xl font-bold text-neutral-800 text-center tracking-widest'>Login</h1>
-
-        <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-          <Input value={email} type='email' onChange={(e) => setEmail(e.target.value)}
-            inputMode='email'
-            required placeholder='👤 Email'
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <Input
+            name="email"
+            aria-label="email input"
+            value={email}
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+            inputMode="email"
+            required
+            placeholder="Email"
             classNames={{
-              inputWrapper: 'w-full rounded-md border border-gray-300',
-            }} />
+              inputWrapper: "w-full rounded-md border border-gray-300",
+            }}
+            startContent={
+              <span className="text-neutral-500">
+                <CiUser />
+              </span>
+            }
+          />
 
-          <Input value={password} type='password' onChange={(e) => setPassword(e.target.value)} required placeholder='🔒 Password'
+          <PasswordInput value={password} setValue={setPassword} />
 
-            classNames={{
-              inputWrapper: 'w-full rounded-md border border-gray-300',
-            }} />
-
-          <Button disabled={loading || success} isLoading={loading || success}
-
-            type='submit' color={success ? "success" : 'primary'} className='text-neutral-50 tracking-wide text-medium font-semibold rounded-md' >
-            {loading ? "loading" : 'Login'}
+          <Button
+            aria-label="login button"
+            disabled={loading || success}
+            isLoading={loading || success}
+            type="submit"
+            color={success ? "success" : "primary"}
+            className="rounded-md text-medium font-semibold tracking-wide text-neutral-50"
+          >
+            {loading ? "loading" : "Login"}
           </Button>
 
-          <Link href='/forgot-password' className='text-neutral-600 text-sm text-center text-opacity-90 transition duration-300 ease-in-out hover:underline hover:font-medium'>
+          <Link
+            href="/forgot-password"
+            className="text-center text-sm text-neutral-600 text-opacity-90 transition duration-300 ease-in-out hover:font-medium hover:underline"
+          >
             Forgot password?
           </Link>
 
-          <Link href='/register' className='text-neutral-600 text-sm text-center pt-1
-          transition duration-300 ease-in-out hover:underline hover:font-medium
-          '>
+          <Link
+            href="/register"
+            className="pt-1 text-center text-sm text-neutral-600
+          transition duration-300 ease-in-out hover:font-medium hover:underline
+          "
+          >
             Don't have an account?{" "}
-            <span className='text-primary-foreground font-medium '>Sign up here</span> 🚀
+            <span className="font-medium text-primary-foreground ">
+              Sign up here
+            </span>{" "}
+            🚀
           </Link>
-          {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
-
-
+          {error && (
+            <p className="text-center text-base font-medium text-red-500 ">
+              {error}
+            </p>
+          )}
         </form>
       </div>
     </section>
