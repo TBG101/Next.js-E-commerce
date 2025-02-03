@@ -71,7 +71,7 @@ function PasswordInput({ value, setValue }: { value: string; setValue: any }) {
       name="password"
       aria-label="password input"
       value={value}
-      onChange={setValue}
+      onChange={(e) => setValue(e.target.value)}
       classNames={{
         inputWrapper: "w-full rounded-md border border-gray-300",
       }}
