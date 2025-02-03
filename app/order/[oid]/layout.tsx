@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Search",
+    title: "Order ",
     description: "Search for products",
     keywords: ["search", "products", "find"],
 };
@@ -11,5 +11,7 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+
+
     return <>{children}</>;
 }

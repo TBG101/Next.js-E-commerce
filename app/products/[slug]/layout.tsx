@@ -1,14 +1,29 @@
-import type { Metadata } from "next";
+import React from 'react';
+import { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Product",
-  description: "Product description",
-};
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ slug: string }>
 }>) {
-  return <>{children}</>;
+  const { slug } = await params;
+
+  const metadata = {
+    title: `Product: ${slug}`,
+    description: "Product details",
+    keywords: ["product", "details"],
+  };
+
+  return (
+    <>
+      <head>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+        <meta name="keywords" content={metadata.keywords.join(', ')} />
+      </head>
+      {children}
+    </>
+  );
 }

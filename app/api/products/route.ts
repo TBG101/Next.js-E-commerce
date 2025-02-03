@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import productModel from '@/models/productModel';
+import dbConnect from '@/lib/dbConnect';
 
 export async function GET(req: NextRequest, res: NextResponse) {
+    await dbConnect();
     try {
         const searchParams = req.nextUrl.searchParams
 
@@ -10,7 +12,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
         const maxProductsNumber = maxProducts ? parseInt(maxProducts) : 20;
 
-        let products = await productModel.find().limit(maxProductsNumber);
+        let products = await productModel.find().limit(maxProductsNumber).exec();
 
         const sex = searchParams.get('sex');
 

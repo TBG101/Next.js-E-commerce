@@ -22,7 +22,6 @@ function HomePage() {
             }
             setLoading(false);
         };
-
         fetchData();
     }, [])
 

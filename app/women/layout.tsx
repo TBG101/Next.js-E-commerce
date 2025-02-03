@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Product",
-    description: "Product description",
+    title: "Products - Women",
+    description: "Women's products",
+    keywords: ["women", "products", "fashion", "clothing"],
 };
 
 export default function RootLayout({
