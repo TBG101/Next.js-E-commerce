@@ -11,7 +11,6 @@ export const authOptions = {
       credentials: {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
-        role: { label: "Role", type: "text" },
       },
       async authorize(credentials) {
         await dbConnect();
@@ -25,7 +24,6 @@ export const authOptions = {
         );
 
         if (!isValid) throw new Error("Invalid password");
-
         return {
           id: user._id,
           email: user.email,
@@ -37,17 +35,26 @@ export const authOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({ token, user }: any) {
+    jwt({ token, user }: any) {
       if (user) {
         token.id = user.id;
+        
         token.email = user.email;
         token.role = user.role;
       }
       return token;
     },
     async session({ session, token }: any) {
+      await dbConnect();
+      const user = await User.findById(token.id);
+      console.log("user", user);
+
+
+      if (!user) return;
+
+      session.user.email = user.email;
       session.user.id = token.id;
-      session.user.role = token.role;
+      session.user.role = user.role;
       return session;
     },
   },
