@@ -6,8 +6,7 @@ function Admin() {
     name: "",
     price: "",
     description: "",
-    images: null,
-    thumbnails: null,
+    images: [] as File[],
     sex: "male",
     discount: "",
   });
@@ -16,7 +15,7 @@ function Admin() {
     const { name, value, files } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: files ? files : value,
+      [name]: files ? [...prevData.images, ...Array.from(files)] : value,
     }));
   };
 
@@ -91,26 +90,45 @@ function Admin() {
               type="file"
               id="images"
               name="images"
-              className="mt-1 rounded-md border p-2"
+              className="hidden"
               onChange={handleChange}
               multiple
               required
             />
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="thumbnails" className="text-gray-700">
-              Thumbnails
+            <label
+              htmlFor="images"
+              className="mt-1 cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white transition-all hover:bg-blue-600"
+            >
+              Upload Images
             </label>
-            <input
-              type="file"
-              id="thumbnails"
-              name="thumbnails"
-              className="mt-1 rounded-md border p-2"
-              onChange={handleChange}
-              multiple
-              required
-            />
+            <div className="mt-2 flex flex-wrap gap-2">
+              {formData.images &&
+                formData.images.map((file: File, index: number) => (
+                  <div key={index} className="relative border-1 shadow-sm">
+                    <span className="absolute bottom-0 right-0 m-1 aspect-square rounded-full bg-gray-800 px-2 py-1 text-xs text-white">
+                      {index + 1}
+                    </span>
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={`image-${index}`}
+                      className="h-28 w-28 rounded-md object-scale-down"
+                    />
+
+                    <button
+                      type="button"
+                      className="absolute right-0 top-0 rounded-full bg-red-500 px-2 py-1 text-xs text-white"
+                      onClick={() => {
+                        setFormData((prevData) => ({
+                          ...prevData,
+                          images: prevData.images.filter((_, i) => i !== index),
+                        }));
+                      }}
+                    >
+                      X
+                    </button>
+                  </div>
+                ))}
+            </div>
           </div>
 
           <div className="flex flex-col">

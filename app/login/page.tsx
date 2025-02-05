@@ -34,6 +34,7 @@ export default function LoginPage() {
         redirect: false,
         email,
         password,
+        
       });
 
       if (result?.error) {

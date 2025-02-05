@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import User from "@/models/userModel";
 import dbConnect from "@/lib/dbConnect";
 import bcrypt from "bcrypt";
+import userModel from "@/models/userModel";
 
 export const authOptions = {
   providers: [
@@ -35,26 +36,26 @@ export const authOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    jwt({ token, user }: any) {
+    async jwt({ token, user }: any) {
       if (user) {
         token.id = user.id;
-        
         token.email = user.email;
         token.role = user.role;
+        token.shouldUpdateUser = Date.now() + 60 * 30 * 1000;
       }
+      if (token.shouldUpdateUser < Date.now()) {
+        await dbConnect();
+        const user = await userModel.findById(token.id);
+        token.role = user.role;
+        token.name;
+      }
+
       return token;
     },
     async session({ session, token }: any) {
-      await dbConnect();
-      const user = await User.findById(token.id);
-      console.log("user", user);
-
-
-      if (!user) return;
-
-      session.user.email = user.email;
+      session.user.email = token.email;
       session.user.id = token.id;
-      session.user.role = user.role;
+      session.user.role = token.role;
       return session;
     },
   },
