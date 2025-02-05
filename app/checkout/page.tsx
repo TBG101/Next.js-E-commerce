@@ -112,7 +112,7 @@ function Checkout() {
 
             {cart.map((product: any) => (
               <CartProduct
-                key={product.id}
+                key={product._id}
                 cartItem={product}
                 addToCart={addToCart}
               />

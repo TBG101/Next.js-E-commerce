@@ -135,7 +135,7 @@ export default function Lightbox({ isOpen, onOpenChange, data }: ModalStates) {
                       <Button
                         className="next absolute -right-7 top-1/2 z-10 flex h-12 w-12 min-w-0 "
                         radius="full"
-                        onClick={() => paginate(1)}
+                        onPress={() => paginate(1)}
                       >
                         <svg
                           width="13"
@@ -153,7 +153,7 @@ export default function Lightbox({ isOpen, onOpenChange, data }: ModalStates) {
                       </Button>
                       <Button
                         className="prev absolute -left-7 top-1/2 z-10 flex h-12 w-12 min-w-0"
-                        onClick={() => paginate(-1)}
+                        onPress={() => paginate(-1)}
                         radius="full"
                       >
                         <svg

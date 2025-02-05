@@ -45,8 +45,8 @@ function SearchPage() {
           {products.length > 0 &&
             products.map((product: any) => {
               return (
-                <div className="place-self-center" key={product.id}>
-                  <Product key={product.id} data={product} />
+                <div className="place-self-center" key={product._id}>
+                  <Product key={product._id} data={product} />
                 </div>
               );
             })}

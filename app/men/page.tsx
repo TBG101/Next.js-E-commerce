@@ -31,7 +31,7 @@ function Men() {
           {products.length > 0 &&
             products.map((product: any) => {
               return (
-                <div className="place-self-center" key={product.id}>
+                <div className="place-self-center" key={product._id}>
                   <Product data={product} />
                 </div>
               );

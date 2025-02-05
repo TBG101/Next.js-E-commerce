@@ -12,20 +12,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    // const fetchCart = async () => {
-    //   try {
-    //     const cartData = await getCart();
-    //     if (Array.isArray(cartData)) {
-    //       setCart(cartData);
-    //     } else {
-    //       console.error("getCart did not return an array:", cartData);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error:", error);
-    //   }
-    // };
-
-    // fetchCart();
     getCartFromLocalStorage();
   }, []);
 
@@ -37,15 +23,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
   };
 
   const addToCart = async (item: CartItem) => {
-
     setCart((prevCart) => {
       // Check if the item already exists in the cart
-      const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
+      const existingItem = prevCart.find((cartItem) => cartItem._id === item._id);
 
       if (existingItem) {
         // If the item already exists, return a new array where the existing item's quantity is updated
         const newCart = prevCart.map((cartItem) =>
-          cartItem.id === item.id
+          cartItem._id === item._id
             ? { ...cartItem, quantity: (cartItem.quantity + item.quantity) < 0 ? 0 : cartItem.quantity + item.quantity }
             : cartItem,
         );
@@ -66,11 +51,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     console.log("cart", cart);
   };
 
-  const deleteFromCart = (itemId: number) => {
-    const itemIdNumber = Number(itemId);
+  const deleteFromCart = (id: string) => {
 
     setCart((prevCart) => {
-      let newCart = prevCart.filter((cartItem) => cartItem.id !== itemIdNumber);
+      let newCart = prevCart.filter((cartItem) => cartItem._id !== id);
       localStorage.setItem("cart", JSON.stringify(newCart));
       return newCart;
     });

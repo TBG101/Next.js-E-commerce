@@ -33,11 +33,11 @@ export async function POST(req: Request, res: NextResponse) {
         let items: { name: any; quantity: number; image: any; price: number; product: any; }[] = [];
 
         for (let item of checkoutData.cartItems) {
-            if (!item.id || !item.quantity) {
+            if (!item._id || !item.quantity) {
                 return NextResponse.json({ message: 'Invalid cart item' }, { status: 400 });
             }
 
-            const product = await Product.findOne({ id: item.id }).exec();
+            const product = await Product.findById(item._id).exec();
 
             if (!product) {
                 return NextResponse.json({ message: 'Product not found' }, { status: 404 });
@@ -55,7 +55,7 @@ export async function POST(req: Request, res: NextResponse) {
                 return NextResponse.json({ message: 'Invalid product data' }, { status: 400 });
 
 
-            if (!mongoose.Types.ObjectId.isValid(product.id)) {
+            if (!mongoose.Types.ObjectId.isValid(product._id)) {
                 return NextResponse.json({ message: 'Invalid product ID' }, { status: 400 });
             }
             items.push({
@@ -63,7 +63,7 @@ export async function POST(req: Request, res: NextResponse) {
                 quantity: item.quantity,
                 image: product.images[0],
                 price: product.price * product.discount,
-                product: await Product.findOne({ id: product.id }).exec(),
+                product: await Product.findById(product._id).exec(),
             });
         }
 

@@ -27,18 +27,12 @@ import Link from "next/link";
 import SearchInput from "./SearchInput";
 import { useSession, signOut } from "next-auth/react";
 import { FaRegCircleUser } from "react-icons/fa6";
-type CartItem = {
-  id: number;
-  name: string;
-  quantity: number;
-  price: number;
-  image: string;
-};
+import { CartItem } from "@/lib/types";
 
 function Navbar() {
+  const [activeItem, setActiveItem] = useState("");
   const { cart, addToCart, deleteFromCart } = useContext(CartContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState("");
   const menuItems = ["Men", "Women", "About", "Contact"];
   const pathname = usePathname();
   const router = useRouter();
@@ -223,7 +217,7 @@ function Navbar() {
               </DropdownTrigger>
               <DropdownMenu aria-label="Dynamic Actions " className="bg-none">
                 {cart.map((item: CartItem) => (
-                  <DropdownItem key={item.id} className="">
+                  <DropdownItem key={item._id} className="">
                     <div className="flex items-center justify-between gap-2 text-sm ">
                       <div className="flex flex-row items-center justify-center gap-2 ">
                         <div>
@@ -249,7 +243,7 @@ function Navbar() {
                         </div>
                       </div>
                       <Button
-                        onPress={() => deleteFromCart(item.id)}
+                        onPress={() => deleteFromCart(item._id)}
                         className="w-15 min-w-0 bg-gray-900 hover:bg-red-500"
                         radius="sm"
                       >
@@ -264,12 +258,14 @@ function Navbar() {
                   </DropdownItem>
                 ))}
                 {cart.length > 0 ? (
-                  <DropdownItem>
+                  <DropdownItem key={"checkout"} >
                     <Button
                       className="w-full bg-primary-orange text-white"
-                      onClick={() => {
+                      onPress={() => {
                         router.push("/checkout");
+
                       }}
+
                     >
                       Checkout
                     </Button>
@@ -280,9 +276,7 @@ function Navbar() {
               </DropdownMenu>
             </Dropdown>
 
-            <Dropdown
-
-            >
+            <Dropdown>
               <DropdownTrigger>
                 <div className="flex w-7 items-center justify-center transition-all duration-300 ease-in-out md:w-10">
                   <Avatar
@@ -318,12 +312,9 @@ function Navbar() {
                   </DropdownItem>
                 </DropdownMenu>
               )}
-
-
               {!session && <DropdownMenu className="bg-none"
-
               >
-                <DropdownItem >
+                <DropdownItem key={"login"} >
                   <Link href={"/login"}>
                     <Button
                       className="w-full bg-primary-orange text-white">
@@ -331,7 +322,7 @@ function Navbar() {
                     </Button>
                   </Link>
                 </DropdownItem>
-                <DropdownItem>
+                <DropdownItem key={"register"} >
                   <Link href="/register">
                     <Button
                       className="w-full bg-primary-orange text-white">
@@ -339,8 +330,6 @@ function Navbar() {
                     </Button>
                   </Link>
                 </DropdownItem>
-
-
               </DropdownMenu>}
             </Dropdown>
             {/* <div className="hidden md:flex">

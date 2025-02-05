@@ -1,4 +1,5 @@
 "use client";
+import { createProduct } from "@/apiqueries/apiqueries";
 import React, { useState } from "react";
 
 function Admin() {
@@ -19,9 +20,22 @@ function Admin() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("price", formData.price);
+    data.append("description", formData.description);
+    data.append("sex", formData.sex);
+    data.append("discount", formData.discount);
+    formData.images.forEach((file) => data.append("images", file));
+    console.log(data);
+    try {
+      const res = await createProduct(data);
+    } catch (res) {
+      console.error(res);
+    }
+
   };
 
   return (
@@ -49,6 +63,7 @@ function Admin() {
               className="mt-1 rounded-md border p-2"
               value={formData.name}
               onChange={handleChange}
+              accept="image/*"
               required
             />
           </div>

@@ -103,4 +103,17 @@ export async function getOrder(order_id: string) {
     return result;
   else
     throw new Error(result.message);
-} 
+}
+
+export async function createProduct(formdata: FormData) {
+  const res = await fetch(`/api/admin/product`, {
+    method: "POST",
+    cache: "no-cache",
+    body: formdata,
+  });
+  const result = await res.json();
+  if (result.ok)
+    return result;
+  else
+    throw new Error(result.message);
+}

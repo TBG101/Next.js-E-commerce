@@ -8,8 +8,10 @@ import { motion, AnimatePresence, wrap } from "framer-motion";
 import Loading from "@/app/components/Loading";
 import { CartContext } from "@/app/providers";
 import Lightbox from "@/app/components/Lightbox";
+import { CartItem } from "@/lib/types";
 
 interface Product {
+  _id: string;
   id: number;
   name: string;
   price: number;
@@ -20,13 +22,6 @@ interface Product {
   currentPrice: number;
 }
 
-type CartItem = {
-  id: number;
-  name: string;
-  quantity: number;
-  price: number;
-  image: string;
-};
 
 const variants = {
   enter: (direction: number) => {
@@ -64,11 +59,12 @@ export default function Page({ params }: { params: { slug: string } }) {
   const imageIndex = wrap(0, data?.images.length ?? 0, page);
 
   const item: CartItem = {
-    id: data?.id ?? 0,
+    _id: data?._id ?? "",
     name: data?.name ?? "",
     quantity: quantity,
     price: data?.currentPrice ?? 0,
     image: data?.thumbnails[0] ?? "",
+    id: 0
   };
 
   const paginate = (newDirection: number) => {
@@ -149,7 +145,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   <Button
                     className="next absolute right-5 top-1/2 z-10 flex h-12 w-12 min-w-0 md:hidden"
                     radius="full"
-                    onClick={() => paginate(1)}
+                    onPress={() => paginate(1)}
                   >
                     <svg
                       width="13"
@@ -167,7 +163,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   </Button>
                   <Button
                     className="prev absolute left-5 top-1/2 z-10 flex h-12 w-12 min-w-0 md:hidden"
-                    onClick={() => paginate(-1)}
+                    onPress={() => paginate(-1)}
                     radius="full"
                   >
                     <svg

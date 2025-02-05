@@ -28,7 +28,7 @@ function HomePageProductsSection({ title, data
                     data.products.length > 0 &&
                     data.products.map((product: any) => {
                         return (
-                            <Product key={product.id} data={product} />
+                            <Product key={product._id} data={product} />
                         )
                     })
                 }

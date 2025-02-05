@@ -7,7 +7,7 @@ import { FaHeart } from "react-icons/fa";
 interface ProductProps {
 
     data: {
-        id: number;
+        _id: string,
         name: string;
         price: number;
         description: string;
@@ -17,7 +17,7 @@ interface ProductProps {
 
 }
 
-function Product(product: ProductProps | any) {
+function Product(product: ProductProps) {
     const productLink = "/products/" + product.data.name.replaceAll(" ", "_").toLowerCase();
     const [isWhislisted, setIsWhislisted] = React.useState(false)
 
@@ -26,7 +26,7 @@ function Product(product: ProductProps | any) {
     useEffect(() => {
         const items = localStorage.getItem("whislist") ?? "[]"
         const whislist = JSON.parse(items)
-        setIsWhislisted(whislist.includes(product.data.id))
+        setIsWhislisted(whislist.includes(product.data._id))
 
     }, [])
 
@@ -34,12 +34,12 @@ function Product(product: ProductProps | any) {
         const items = localStorage.getItem("whislist") ?? "[]"
         const whislist = JSON.parse(items)
         if (isWhislisted) {
-            const newWhislist = whislist.filter((id: number) => id !== product.data.id)
+            const newWhislist = whislist.filter((id: string) => id !== product.data._id)
             setIsWhislisted(false)
             localStorage.setItem("whislist", JSON.stringify(newWhislist))
         } else {
             setIsWhislisted(true)
-            const newWhislist = [...whislist, product.data.id]
+            const newWhislist = [...whislist, product.data._id]
             localStorage.setItem("whislist", JSON.stringify(newWhislist))
         }
     }
@@ -58,9 +58,8 @@ function Product(product: ProductProps | any) {
                 </button>
             </div>
             <Link href={productLink} className='flex flex-col justify-center items-start cursor-pointer'>
-                <div className='aspect-square max-h-96'>
-
-                    <Image src={`/images/image-product-1.jpg`}
+                <div className='aspect-square max-h-96 bg-neutral-300'>
+                    <Image src={`${product.data.images[0]}`}
                         radius="none"
                         alt='failed'
                         isZoomed={true}
