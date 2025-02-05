@@ -3,7 +3,8 @@ import { Kumbh_Sans } from "next/font/google";
 import "./globals.css";
 import AppLayout from "./components/AppLayout";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/utils";
+
 
 const kumbh = Kumbh_Sans({ subsets: ["latin"], variable: "--kumbh_sans" });
 

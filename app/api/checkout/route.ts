@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/dbConnect"
 import { NextResponse } from 'next/server';
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from '@/lib/utils';
 import { getServerSession } from "next-auth/next"
 import { CheckoutFields } from "@/lib/types";
 import Order from "@/models/orderModel";

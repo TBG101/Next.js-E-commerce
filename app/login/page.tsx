@@ -34,7 +34,7 @@ export default function LoginPage() {
         redirect: false,
         email,
         password,
-        
+
       });
 
       if (result?.error) {
@@ -112,7 +112,7 @@ export default function LoginPage() {
           transition duration-300 ease-in-out hover:font-medium hover:underline
           "
           >
-            Don't have an account?{" "}
+            {"Don't have an account? "}
             <span className="font-medium text-primary-foreground ">
               Sign up here
             </span>{" "}

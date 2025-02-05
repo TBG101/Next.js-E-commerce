@@ -1,11 +1,11 @@
 import dbConnect from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { authOptions } from "../../auth/[...nextauth]/route";
 import fs from "fs";
 import path from "path";
 import sharp from "sharp";
 import productModel from "@/models/productModel";
+import { authOptions } from "@/lib/utils";
 
 interface productCreate {
   name: string;
@@ -16,12 +16,6 @@ interface productCreate {
   sex: string;
   discount: number;
 }
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
 
 export async function POST(req: Request) {
   await dbConnect();

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { NextApiRequest } from 'next';
 import Product from '@/models/productModel';
 import dbConnect from '@/lib/dbConnect';
 
