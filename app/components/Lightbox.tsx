@@ -24,7 +24,11 @@ export default function Lightbox({ isOpen, onOpenChange, data }: ModalStates) {
 
   const imageIndex = wrap(0, data?.images.length ?? 0, page);
   const paginate = (newDirection: number) => {
-    setPage([page + newDirection, newDirection]);
+    if (newDirection === 1 && page === data?.images.length - 1) {
+      return setPage([0, 1]);
+    } else if (newDirection === -1 && page === 0) {
+      return setPage([data?.images.length - 1, -1]);
+    } else setPage([page + newDirection, newDirection]);
   };
 
   const variants = {
@@ -72,21 +76,10 @@ export default function Lightbox({ isOpen, onOpenChange, data }: ModalStates) {
           isDismissable={true}
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          className="overflow-y-hidden bg-transparent shadow-none px-16 h-min m-0 sm:m-0"
-          size="2xl"
+          className="m-0 h-min overflow-y-hidden bg-transparent px-16 shadow-none sm:m-0 "
+          size="4xl"
           placement="center"
-          closeButton={
-            <div className="">
-              <svg
-                width="14"
-                height="15"
-                xmlns="http://www.w3.org/2000/svg"
-                className="fill-primary-orange"
-              >
-                <path d="m11.596.782 2.122 2.122L9.12 7.499l4.597 4.597-2.122 2.122L7 9.62l-4.595 4.597-2.122-2.122L4.878 7.5.282 2.904 2.404.782l4.595 4.596L11.596.782Z" />
-              </svg>
-            </div>
-          }
+          hideCloseButton={true}
         >
           <ModalContent>
             {(onClose) => (
@@ -100,7 +93,7 @@ export default function Lightbox({ isOpen, onOpenChange, data }: ModalStates) {
                         custom={direction}
                       >
                         <motion.div
-                          className="relative flex h-1/2 w-full items-center justify-center overflow-hidden object-contain md:rounded-lg"
+                          className="relative flex h-1/2 w-full select-none items-center justify-center overflow-hidden object-contain md:rounded-lg"
                           key={page}
                           custom={direction}
                           variants={variants}
@@ -124,12 +117,28 @@ export default function Lightbox({ isOpen, onOpenChange, data }: ModalStates) {
                             }
                           }}
                         >
-                          <Image
-                            src={`/${data?.images[imageIndex]}`}
-                            radius="none"
-                            className=""
-                            alt={`${data?.images[imageIndex]}-image`}
-                          />
+                          <div>
+                            <div
+                              onClick={() => onOpenChange()}
+                              className="absolute right-0 z-50 flex  cursor-pointer items-center justify-center fill-primary-orange p-3
+                            font-semibold text-white transition-all duration-300 ease-in-out hover:scale-105 hover:fill-[#ff4141]"
+                            >
+                              <svg
+                                width="14"
+                                height="15"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className=""
+                              >
+                                <path d="m11.596.782 2.122 2.122L9.12 7.499l4.597 4.597-2.122 2.122L7 9.62l-4.595 4.597-2.122-2.122L4.878 7.5.282 2.904 2.404.782l4.595 4.596L11.596.782Z" />
+                              </svg>
+                            </div>
+                            <Image
+                              src={`${data?.images[imageIndex]}`}
+                              radius="none"
+                              className="select-none"
+                              alt={`${data?.images[imageIndex]}-image`}
+                            />
+                          </div>
                         </motion.div>
                       </AnimatePresence>
                       <Button
@@ -184,7 +193,7 @@ export default function Lightbox({ isOpen, onOpenChange, data }: ModalStates) {
                             className={`overflow-hidden rounded-lg border-3 ${index === page ? ` border-primary-orange` : `border-transparent dark:border-neutral-black`}`}
                           >
                             <Image
-                              src={`/${image}`}
+                              src={`${image}`}
                               width={1000}
                               radius="none"
                               alt={`${image}-image`}

@@ -1,8 +1,12 @@
 "use client";
 import { createProduct } from "@/apiqueries/apiqueries";
+import { Button } from "@nextui-org/react";
 import React, { useState } from "react";
 
 function Admin() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -14,6 +18,7 @@ function Admin() {
 
   const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value, files } = e.target;
+    setSuccess("");
     setFormData((prevData) => ({
       ...prevData,
       [name]: files ? [...prevData.images, ...Array.from(files)] : value,
@@ -22,6 +27,8 @@ function Admin() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
     const data = new FormData();
     data.append("name", formData.name);
     data.append("price", formData.price);
@@ -32,10 +39,22 @@ function Admin() {
     console.log(data);
     try {
       const res = await createProduct(data);
-    } catch (res) {
+      console.log(res);
+      setFormData({
+        name: "",
+        price: "",
+        description: "",
+        images: [] as File[],
+        sex: "male",
+        discount: "",
+      });
+      setLoading(false);
+      setSuccess("Product added successfully");
+    } catch (res: any) {
       console.error(res);
+      setLoading(false);
+      setError(res.message);
     }
-
   };
 
   return (
@@ -179,12 +198,15 @@ function Admin() {
             />
           </div>
 
-          <button
+          <Button
+            isLoading={loading}
+            color={success ? "success" : "primary"}
             type="submit"
-            className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            radius="sm"
+            className="tracking-wider text-white font-semibold text-lg py-4"
           >
             Add Product
-          </button>
+          </Button>
         </form>
       </div>
     </section>

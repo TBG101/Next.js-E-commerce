@@ -5,7 +5,6 @@ import AppLayout from "./components/AppLayout";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/utils";
 
-
 const kumbh = Kumbh_Sans({ subsets: ["latin"], variable: "--kumbh_sans" });
 
 export const metadata: Metadata = {
@@ -27,11 +26,11 @@ export const metadata: Metadata = {
         alt: "brand",
       },
     ],
-
   },
 };
 
-export default async function RootLayout({ children,
+export default async function RootLayout({
+  children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -44,13 +43,14 @@ export default async function RootLayout({ children,
         <meta property="og:type" content="website" />
         <meta property="og:url" content="http://localhost:3000" />
         <meta property="og:title" content="Sneakers" />
-        <meta property="og:description" content="The best sneakers in the world" />
+        <meta
+          property="og:description"
+          content="The best sneakers in the world"
+        />
         <meta property="og:image" content="http://localhost:3000/brand.svg" />
       </head>
       <body className={`${kumbh.className}`}>
-        <AppLayout session={session}>
-          {children}
-        </AppLayout>
+        <AppLayout session={session}>{children}</AppLayout>
       </body>
     </html>
   );

@@ -5,7 +5,6 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import React, { useState, createContext, useEffect } from "react";
 import { CartItem } from "@/lib/types";
 
-
 export const CartContext = createContext<any>(null);
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -25,13 +24,21 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const addToCart = async (item: CartItem) => {
     setCart((prevCart) => {
       // Check if the item already exists in the cart
-      const existingItem = prevCart.find((cartItem) => cartItem._id === item._id);
+      const existingItem = prevCart.find(
+        (cartItem) => cartItem._id === item._id,
+      );
 
       if (existingItem) {
         // If the item already exists, return a new array where the existing item's quantity is updated
         const newCart = prevCart.map((cartItem) =>
           cartItem._id === item._id
-            ? { ...cartItem, quantity: (cartItem.quantity + item.quantity) < 0 ? 0 : cartItem.quantity + item.quantity }
+            ? {
+                ...cartItem,
+                quantity:
+                  cartItem.quantity + item.quantity < 0
+                    ? 0
+                    : cartItem.quantity + item.quantity,
+              }
             : cartItem,
         );
         localStorage.setItem("cart", JSON.stringify(newCart));
@@ -52,14 +59,19 @@ export function Providers({ children }: { children: React.ReactNode }) {
   };
 
   const deleteFromCart = (id: string) => {
-
     setCart((prevCart) => {
       let newCart = prevCart.filter((cartItem) => cartItem._id !== id);
       localStorage.setItem("cart", JSON.stringify(newCart));
       return newCart;
     });
   };
-
+  return (
+    <NextUIProvider>
+      <CartContext.Provider value={{ cart, addToCart, deleteFromCart }}>
+        {children}
+      </CartContext.Provider>
+    </NextUIProvider>
+  );
   return (
     <NextUIProvider>
       <NextThemesProvider attribute="class" defaultTheme="light">
@@ -70,4 +82,3 @@ export function Providers({ children }: { children: React.ReactNode }) {
     </NextUIProvider>
   );
 }
-

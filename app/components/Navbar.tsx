@@ -258,14 +258,12 @@ function Navbar() {
                   </DropdownItem>
                 ))}
                 {cart.length > 0 ? (
-                  <DropdownItem key={"checkout"} >
+                  <DropdownItem key={"checkout"}>
                     <Button
                       className="w-full bg-primary-orange text-white"
                       onPress={() => {
                         router.push("/checkout");
-
                       }}
-
                     >
                       Checkout
                     </Button>
@@ -285,21 +283,23 @@ function Navbar() {
                     name="Jason Hughes"
                     size="sm"
                     alt="image-avatar"
-                    fallback={<FaRegCircleUser size={24} />}
+                    fallback={<FaRegCircleUser size={24} color="#69707D" />}
                   />
-
                 </div>
               </DropdownTrigger>
               {session && session.user && status === "authenticated" && (
                 <DropdownMenu className="bg-none" variant="light">
-                  <DropdownItem key="profile" className="pb-2 gap-2" >
-                    <p className="tracking-widest">Welcome <span className="font-medium">{session.user.name}</span>!</p>
+                  <DropdownItem key="welcome" className="gap-2 pb-2">
+                    <p className="tracking-widest">
+                      Welcome{" "}
+                      <span className="font-medium">{session.user.name}</span>!
+                    </p>
                   </DropdownItem>
-                  <DropdownItem key="profile" className="pb-2 gap-2">
+                  <DropdownItem key="Settings" className="gap-2 pb-2">
                     <p className="tracking-widest">Settings</p>
                   </DropdownItem>
-                  <DropdownItem key="profile" className="gap-2">
-                    <p className="tracking-widest" >
+                  <DropdownItem key="logout" className="gap-2">
+                    <p className="tracking-widest">
                       <Link
                         href={""}
                         onClick={() => {
@@ -312,25 +312,24 @@ function Navbar() {
                   </DropdownItem>
                 </DropdownMenu>
               )}
-              {!session && <DropdownMenu className="bg-none"
-              >
-                <DropdownItem key={"login"} >
-                  <Link href={"/login"}>
-                    <Button
-                      className="w-full bg-primary-orange text-white">
-                      Login
-                    </Button>
-                  </Link>
-                </DropdownItem>
-                <DropdownItem key={"register"} >
-                  <Link href="/register">
-                    <Button
-                      className="w-full bg-primary-orange text-white">
-                      Sign up
-                    </Button>
-                  </Link>
-                </DropdownItem>
-              </DropdownMenu>}
+              {!session && (
+                <DropdownMenu className="bg-none">
+                  <DropdownItem key={"login"}>
+                    <Link href={"/login"}>
+                      <Button className="w-full bg-primary-orange text-white">
+                        Login
+                      </Button>
+                    </Link>
+                  </DropdownItem>
+                  <DropdownItem key={"register"}>
+                    <Link href="/register">
+                      <Button className="w-full bg-primary-orange text-white">
+                        Sign up
+                      </Button>
+                    </Link>
+                  </DropdownItem>
+                </DropdownMenu>
+              )}
             </Dropdown>
             {/* <div className="hidden md:flex">
 
@@ -364,7 +363,7 @@ function Navbar() {
           <SearchInput />
         </span>
       </div>
-    </Nav >
+    </Nav>
   );
 }
 

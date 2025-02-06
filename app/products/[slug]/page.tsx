@@ -22,7 +22,6 @@ interface Product {
   currentPrice: number;
 }
 
-
 const variants = {
   enter: (direction: number) => {
     return {
@@ -66,7 +65,7 @@ export default function Page() {
     quantity: quantity,
     price: data?.currentPrice ?? 0,
     image: data?.thumbnails[0] ?? "",
-    id: 0
+    id: 0,
   };
 
   const paginate = (newDirection: number) => {
@@ -78,7 +77,7 @@ export default function Page() {
       try {
         const apidata = await getProduct(params.slug as string);
         const currentPrice = apidata.price * apidata.discount;
-
+        console.log(apidata);
         setData({ ...apidata, currentPrice });
         setIsLoading(false);
       } catch (error) {
@@ -99,7 +98,6 @@ export default function Page() {
   if (!params.slug) {
     return <div>Product not found</div>;
   }
-
   return (
     <main className="container mx-auto flex w-full min-w-[375px] overflow-auto transition-all duration-300 ease-in-out">
       {isLoading ? (
@@ -107,11 +105,13 @@ export default function Page() {
       ) : (
         <>
           <Lightbox data={data} isOpen={isOpen} onOpenChange={onOpenChange} />
-          <div className="flex h-full w-full flex-col gap-5 transition-all duration-300 ease-in-out md:flex-row md:gap-20 items-center justify-center md:px-10">
-            <div className="flex h-full md:w-3/4 w-full flex-col gap-7 transition-all duration-300 ease-in-out md:items-center md:justify-center md:py-12  xl:px-10">
+          <div className="flex h-full w-full flex-col items-center justify-center gap-5 transition-all duration-300 ease-in-out md:flex-row md:gap-20 md:px-10">
+            <div className="flex h-full w-full flex-col gap-7 transition-all duration-300 ease-in-out md:w-3/4 md:items-center md:justify-center md:py-12  xl:px-10">
               <div className="flex h-full w-full transition-all duration-300 ease-in-out md:items-center md:justify-center ">
-                <div className="relative flex h-full w-full items-center overflow-hidden object-cover transition-all 
-                duration-300 ease-in-out md:rounded-md aspect-square">
+                <div
+                  className="relative flex aspect-square h-full w-full items-center overflow-hidden object-cover 
+                transition-all duration-300 ease-in-out md:rounded-md"
+                >
                   <AnimatePresence initial={false} custom={direction}>
                     <motion.div
                       onClick={onOpen}
@@ -140,12 +140,11 @@ export default function Page() {
                       }}
                     >
                       <Image
-                        src={`/${data?.images[imageIndex]}`}
+                        src={data?.images[imageIndex]}
                         radius="none"
-                        className="object-cover aspect-square"
+                        className="aspect-square object-cover"
                         alt={`${data?.images[imageIndex]}-image`}
                       />
-
                     </motion.div>
                   </AnimatePresence>
                   <Button
@@ -200,7 +199,7 @@ export default function Page() {
                       className={`overflow-hidden rounded-lg border-3 ${index === page ? ` border-primary-orange` : `border-neutral-white dark:border-neutral-black`}`}
                     >
                       <Image
-                        src={`/${data?.thumbnails[index]}`}
+                        src={data?.thumbnails[index]}
                         width={1000}
                         radius="none"
                         alt={`${data?.thumbnails[index]}-image`}

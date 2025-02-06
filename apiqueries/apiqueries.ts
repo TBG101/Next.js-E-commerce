@@ -121,7 +121,7 @@ export async function createProduct(formdata: FormData) {
     body: formdata,
   });
   const result = await res.json();
-  if (result.ok)
+  if (res.ok)
     return result;
   else
     throw new Error(result.message);

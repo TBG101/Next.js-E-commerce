@@ -18,9 +18,14 @@ export default function LoginPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
 
+  useEffect(() => {
+    if (session && status === "authenticated") {
+      router.push("/");
+    }
+  }, [session, status, router]);
+
   if (status === "loading") return <Loading />;
   if (session && status === "authenticated") {
-    router.push("/");
     return <Loading />;
   }
 
