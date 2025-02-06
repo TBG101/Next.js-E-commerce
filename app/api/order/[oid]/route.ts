@@ -1,11 +1,12 @@
 import dbConnect from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/utils";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Order from "@/models/orderModel";
+import { NextApiRequest } from "next";
 
-export async function GET(req: Request, context: { params: { oid: string } }) {
-    const { oid } = context.params;
+export async function GET(req: Request, { params }: { params: Promise<{ oid: string }> }) {
+    const oid = (await params).oid;
 
     await dbConnect()
     const session = await getServerSession(authOptions);

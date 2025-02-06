@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import productModel from '@/models/productModel';
 import dbConnect from '@/lib/dbConnect';
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
     await dbConnect();
     try {
         const searchParams = req.nextUrl.searchParams

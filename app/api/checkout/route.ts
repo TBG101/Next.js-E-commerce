@@ -7,7 +7,7 @@ import Order from "@/models/orderModel";
 import Product from "@/models/productModel";
 import mongoose from "mongoose";
 
-export async function POST(req: Request, res: NextResponse) {
+export async function POST(req: Request) {
     await dbConnect()
     const session = await getServerSession(authOptions);
     if (!session) {

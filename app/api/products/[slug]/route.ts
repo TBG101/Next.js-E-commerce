@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import dbConnect from '@/lib/dbConnect';
 import productModel from '@/models/productModel';
 
-export async function GET(req: Request, context: { params: { slug: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ slug: string }> }) {
     await dbConnect();
     try {
-        const slug = context.params.slug;
+        const slug = (await params).slug;
 
         const productName = slug.replace(/_/g, " ").toLowerCase();
         const regEX = new RegExp(productName, 'i');

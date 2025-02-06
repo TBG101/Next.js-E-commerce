@@ -21,28 +21,37 @@ export async function getProduct(slug: string) {
 }
 
 export async function getProducts({ maxProducts, sex }: { maxProducts?: number, sex?: string } = {}) {
-  let url = `/api/products`;
-  const params = new URLSearchParams();
+  try {
+    let url = `/api/products`;
+    const params = new URLSearchParams();
 
-  if (maxProducts) {
-    params.append('maxProducts', maxProducts.toString());
+    if (maxProducts) {
+      params.append('maxProducts', maxProducts.toString());
+    }
+
+    if (sex) {
+      params.append('sex', sex);
+    }
+
+    if (params.toString()) {
+      url += `?${params.toString()}`;
+    }
+
+    const res = await fetch(url, {
+      method: "GET",
+      cache: "no-cache",
+    });
+
+    const result = await res.json();
+    if (res.ok)
+      return result;
+    else { 
+      console.error("Error in getProducts:", result);
+      return []; }
+  } catch (error) {
+    console.error("Error in getProducts:", error);
+    return [];
   }
-
-  if (sex) {
-    params.append('sex', sex);
-  }
-
-  if (params.toString()) {
-    url += `?${params.toString()}`;
-  }
-
-  const res = await fetch(url, {
-    method: "GET",
-    cache: "no-cache",
-  });
-
-  const result = await res.json();
-  return result;
 }
 
 export async function searchProducts(search: string) {

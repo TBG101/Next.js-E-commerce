@@ -3,12 +3,12 @@
 import { useState, useEffect, useContext } from "react";
 import { getProduct } from "@/apiqueries/apiqueries";
 import { Image, Button, useDisclosure } from "@nextui-org/react";
-import { originalPathname } from "next/dist/build/templates/app-page";
 import { motion, AnimatePresence, wrap } from "framer-motion";
 import Loading from "@/app/components/Loading";
 import { CartContext } from "@/app/providers";
 import Lightbox from "@/app/components/Lightbox";
 import { CartItem } from "@/lib/types";
+import { useParams } from "next/navigation";
 
 interface Product {
   _id: string;
@@ -49,7 +49,9 @@ const swipePower = (offset: number, velocity: number) => {
   return Math.abs(offset) * velocity;
 };
 
-export default function Page({ params }: { params: { slug: string } }) {
+export default function Page() {
+  const params = useParams();
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { cart, addToCart } = useContext(CartContext);
   const [data, setData] = useState<Product | undefined>();
@@ -70,10 +72,11 @@ export default function Page({ params }: { params: { slug: string } }) {
   const paginate = (newDirection: number) => {
     setPage([page + newDirection, newDirection]);
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apidata = await getProduct(params.slug);
+        const apidata = await getProduct(params.slug as string);
         const currentPrice = apidata.price * apidata.discount;
 
         setData({ ...apidata, currentPrice });
@@ -93,6 +96,9 @@ export default function Page({ params }: { params: { slug: string } }) {
   const minusHandler = () => {
     setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 0));
   };
+  if (!params.slug) {
+    return <div>Product not found</div>;
+  }
 
   return (
     <main className="container mx-auto flex w-full min-w-[375px] overflow-auto transition-all duration-300 ease-in-out">
