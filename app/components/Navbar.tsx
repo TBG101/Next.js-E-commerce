@@ -156,7 +156,7 @@ function Navbar() {
                   setActiveItem("");
                 }}
               >
-                <img src="/brand.svg" alt="brand" />
+                <Image src="/brand.png" alt="brand" width={130} />
               </Link>
             </NavbarBrand>
           </NavbarContent>

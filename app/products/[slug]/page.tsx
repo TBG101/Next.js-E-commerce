@@ -99,7 +99,7 @@ export default function Page() {
     return <div>Product not found</div>;
   }
   return (
-    <main className="container mx-auto flex w-full min-w-[375px] overflow-auto transition-all duration-300 ease-in-out">
+    <main className="mx-auto flex w-full min-w-[375px] overflow-auto transition-all duration-300 ease-in-out md:max-w-[900px] lg:max-w-[1230px] ">
       {isLoading ? (
         <Loading />
       ) : (
@@ -187,7 +187,7 @@ export default function Page() {
                   </Button>
                 </div>
               </div>
-              <div className="hidden gap-7 md:flex">
+              <div className="gap- hidden md:flex">
                 {data?.images.map((image, index) => {
                   return (
                     <button
