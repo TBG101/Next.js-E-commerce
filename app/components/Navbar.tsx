@@ -28,12 +28,16 @@ import SearchInput from "./SearchInput";
 import { useSession, signOut } from "next-auth/react";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { CartItem } from "@/lib/types";
+import { tr } from "framer-motion/client";
 
 function Navbar() {
   const [activeItem, setActiveItem] = useState("");
   const { cart, addToCart, deleteFromCart } = useContext(CartContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuItems = ["Men", "Women", "About", "Contact"];
+  const menuItems = React.useMemo(
+    () => ["Men", "Women", "About", "Contact"],
+    [],
+  );
   const pathname = usePathname();
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -49,13 +53,13 @@ function Navbar() {
     if (activeMenuItem) {
       setActiveItem(activeMenuItem);
     } else setActiveItem("");
-  }, [pathname]);
+  }, [pathname, menuItems]);
 
   return (
     <Nav
       onMenuOpenChange={setIsMenuOpen}
       isMenuOpen={isMenuOpen}
-      isBlurred={false}
+      isBlurred={true}
       classNames={{
         base: ["h-[110px]", "md:h-[70px]", "border-b-1"],
         wrapper: ["w-full max-w-[1440px]"],
