@@ -7,10 +7,10 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   });
   console.log(token);
-  if (!token) return NextResponse.redirect(new URL("/", request.url).toString());
+  if (!token) return NextResponse.redirect(new URL("/", request.url));
 
   if (token.role === "admin") return;
-  return NextResponse.redirect(new URL("/", request.url).toString());
+  return NextResponse.redirect(new URL("/", request.url));
 }
 
 export const config = { matcher: ["/admin"] };
