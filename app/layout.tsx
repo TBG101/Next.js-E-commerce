@@ -8,22 +8,25 @@ import { authOptions } from "@/lib/utils";
 const kumbh = Kumbh_Sans({ subsets: ["latin"], variable: "--kumbh_sans" });
 
 export const metadata: Metadata = {
-  title: "Sneakers",
-  description: "The best sneakers in the world",
-  keywords: "sneakers, shoes, fashion",
+  title: "Glitz Gear - Elevate Your Style",
+  description:
+    "Discover the ultimate in fashion with Glitz Gear, your go-to brand for premium clothing, watches, and apparel.",
+  keywords: ["watches", "fashion", "premium clothing", "style", "accessories"],
+  icons: {
+    icon: [{ url: "icon.png", type: "image/png" }],
+  },
   openGraph: {
     type: "website",
-    url: "http://localhost:3000",
-    title: "Sneakers",
-    description: "The best sneakers in the world",
-
-    // This image will be used as the default social share image
+    url: "https://glitzgear.com",
+    title: "Glitz Gear - Elevate Your Style",
+    description:
+      "Explore Glitz Gear for the finest selection of fashion-forward clothing and accessories.",
     images: [
       {
-        url: "http://localhost:3000/brand.svg",
-        width: 800,
-        height: 600,
-        alt: "brand",
+        url: "https://glitzgear.com/assets/brand-icon.png",
+        width: 1200,
+        height: 630,
+        alt: "Glitz Gear Logo",
       },
     ],
   },
@@ -31,25 +34,14 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   const session = await getServerSession(authOptions);
 
   return (
     <html lang="en">
-      <head>
-        <meta name="keywords" content="sneakers, shoes, fashion" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="http://localhost:3000" />
-        <meta property="og:title" content="Sneakers" />
-        <meta
-          property="og:description"
-          content="The best sneakers in the world"
-        />
-        <meta property="og:image" content="http://localhost:3000/brand.svg" />
-      </head>
-      <body className={`${kumbh.className}`}>
+      <body className={kumbh.variable}>
         <AppLayout session={session}>{children}</AppLayout>
       </body>
     </html>

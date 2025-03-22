@@ -9,7 +9,7 @@ function Footer() {
           <span className="text-sm  dark:text-gray-400 sm:text-center">
             © 2023{" "}
             <Link href="https://sneakers.com/" className="hover:underline">
-              Sneakers
+              Glitz Gear
             </Link>
             . All Rights Reserved.
           </span>
