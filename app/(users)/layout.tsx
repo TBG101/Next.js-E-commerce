@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Kumbh_Sans } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
+import AppLayout from "../AppLayout";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authUtils";
-
-const kumbh = Kumbh_Sans({ subsets: ["latin"], variable: "--kumbh_sans" });
+import LayoutWrapper from "./components/layout/layoutWrapper";
 
 export const metadata: Metadata = {
-  title: "Glitz Gear",
+  title: "Glitz Gear - Elevate Your Style",
   description:
     "Discover the ultimate in fashion with Glitz Gear, your go-to brand for premium clothing, watches, and apparel.",
   keywords: ["watches", "fashion", "premium clothing", "style", "accessories"],
@@ -39,8 +39,8 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
 
   return (
-    <html lang="en">
-      <body className={kumbh.variable}>{children}</body>
-    </html>
+    <AppLayout session={session}>
+      <LayoutWrapper>{children}</LayoutWrapper>
+    </AppLayout>
   );
 }
