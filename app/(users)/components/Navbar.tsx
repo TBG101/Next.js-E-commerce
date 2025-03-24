@@ -28,7 +28,6 @@ import SearchInput from "./SearchInput";
 import { useSession, signOut } from "next-auth/react";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { CartItem } from "@/lib/types";
-import { tr } from "framer-motion/client";
 
 function Navbar() {
   const [activeItem, setActiveItem] = useState("");
@@ -219,17 +218,21 @@ function Navbar() {
                   ) : null}
                 </div>
               </DropdownTrigger>
-              <DropdownMenu aria-label="Dynamic Actions " className="bg-none">
+              <DropdownMenu
+                aria-label="Dynamic Actions "
+                className="bg-none"
+                variant="light"
+              >
                 {cart.map((item: CartItem) => (
                   <DropdownItem key={item._id} className="">
                     <div className="flex items-center justify-between gap-2 text-sm ">
                       <div className="flex flex-row items-center justify-center gap-2 ">
                         <div>
                           <Image
-                            alt={`/${item.image}`}
+                            alt={`${item.image}`}
                             width={50}
                             radius="md"
-                            src={`/${item.image}`}
+                            src={`${item.image}`}
                           />
                         </div>
                         <div className="flex flex-col ">
@@ -317,7 +320,7 @@ function Navbar() {
                 </DropdownMenu>
               )}
               {!session && (
-                <DropdownMenu className="bg-none">
+                <DropdownMenu className="bg-none" variant="light">
                   <DropdownItem key={"login"}>
                     <Link href={"/login"}>
                       <Button className="w-full bg-primary-orange text-white">

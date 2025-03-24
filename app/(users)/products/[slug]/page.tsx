@@ -237,14 +237,14 @@ export default function Page() {
               <div className="flex w-full flex-col gap-5 md:flex-row">
                 <div className="flex w-full items-center justify-between md:w-2/5 ">
                   <Button onPress={minusHandler} className="bg-inherit">
-                    <Image src={`/images/icon-minus.svg`} />
+                    <Image src={`/images/icon-minus.svg`} alt="minus" />
                   </Button>
                   <div className="flex items-center justify-center font-bold">
                     {quantity}
                   </div>
 
                   <Button onPress={addHandler} className="bg-inherit">
-                    <Image src={`/images/icon-plus.svg`} />
+                    <Image src={`/images/icon-plus.svg`} alt="plus" />
                   </Button>
                 </div>
                 <Button

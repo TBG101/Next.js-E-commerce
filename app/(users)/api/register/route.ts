@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
-import User from '@/models/userModel';
-import dbConnect from '@/lib/dbConnect';
+import { NextResponse } from "next/server";
+import { userModel } from "@/models/userModel";
+import dbConnect from "@/lib/dbConnect";
 
 export async function POST(request: Request) {
   await dbConnect();
@@ -8,25 +8,25 @@ export async function POST(request: Request) {
   const { email, password, name } = await request.json();
 
   try {
-    const existingUser = await User.findOne({ email });
+    const existingUser = await userModel.findOne({ email });
     if (existingUser) {
       return NextResponse.json(
-        { message: 'User already exists' },
-        { status: 400 }
+        { message: "User already exists" },
+        { status: 400 },
       );
     }
 
-    const user = new User({ email, password, name });
+    const user = new userModel({ email, password, name });
     await user.save();
 
     return NextResponse.json(
-      { message: 'User created successfully' },
-      { status: 201 }
+      { message: "User created successfully" },
+      { status: 201 },
     );
   } catch (error) {
     return NextResponse.json(
-      { message: 'Error creating user' },
-      { status: 500 }
+      { message: "Error creating user" },
+      { status: 500 },
     );
   }
 }

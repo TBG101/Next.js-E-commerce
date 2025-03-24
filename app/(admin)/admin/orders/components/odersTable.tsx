@@ -38,40 +38,100 @@ import { IoEyeOutline } from "react-icons/io5";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { userType } from "@/models/userModel";
-import { fetchCustomers } from "@/apiqueries/serverActions";
+import { fetchCustomers, fetchOrders } from "@/apiqueries/serverActions";
+import { orderType } from "@/models/orderModel";
 
-export function CustomersTable() {
-  const columns: ColumnDef<userType>[] = [
+export function OrdersTable() {
+  const columns: ColumnDef<orderType>[] = [
     {
-      accessorKey: "email",
-      header: "Email",
-      cell: ({ row }) => <div>{row.getValue("email")}</div>,
+      accessorKey: "user",
+      header: "User",
+      cell: ({ row }) => <div>name</div>,
+    },
+    // {
+    //   accessorKey: "orderItems",
+    //   header: "Order Items",
+    //   cell: ({ row }) => (
+    //     <div>
+    //       {row.original.orderItems.map((item, index) => (
+    //         <div key={index}>
+    //           {item.name} (x{item.quantity})
+    //         </div>
+    //       ))}
+    //     </div>
+    //   ),
+    // },
+    {
+      accessorKey: "shippingAddress",
+      header: "Shipping Address",
+      cell: ({ row }) => {
+        const address = row.original.shippingAddress;
+        return (
+          <div>
+            {address?.fullName ?? "N/A"}, {address?.address ?? "N/A"},{" "}
+            {address?.city ?? "N/A"}, {address?.postalCode ?? "N/A"},{" "}
+            {address?.country ?? "N/A"}
+          </div>
+        );
+      },
     },
     {
-      accessorKey: "name",
-      header: "Name",
-      cell: ({ row }) => <div>{row.getValue("name")}</div>,
+      accessorKey: "paymentMethod",
+      header: "Payment Method",
+      cell: ({ row }) => <div>{row.getValue("paymentMethod")}</div>,
     },
     {
-      accessorKey: "role",
-      header: "Role",
-      cell: ({ row }) => <div>{row.getValue("role")}</div>,
+      accessorKey: "shippingPrice",
+      header: "Shipping Price",
+      cell: ({ row }) => <div>${row.getValue("shippingPrice")}</div>,
     },
     {
-      accessorKey: "createdAt",
-      header: "Created At",
+      accessorKey: "totalPrice",
+      header: "Total Price",
+      cell: ({ row }) => <div>${row.getValue("totalPrice")}</div>,
+    },
+    {
+      accessorKey: "isPaid",
+      header: "Paid",
+      cell: ({ row }) => <div>{row.getValue("isPaid") ? "Yes" : "No"}</div>,
+    },
+    {
+      accessorKey: "paidAt",
+      header: "Paid At",
       cell: ({ row }) => (
         <div>
-          {new Date(row.getValue("createdAt") as string).toLocaleString()}
+          {row.getValue("paidAt")
+            ? new Date(row.getValue("paidAt") as string).toLocaleString()
+            : "N/A"}
         </div>
       ),
     },
     {
-      accessorKey: "updatedAt",
-      header: "Updated At",
+      accessorKey: "isDelivered",
+      header: "Delivered",
+      cell: ({ row }) => (
+        <div>{row.getValue("isDelivered") ? "Yes" : "No"}</div>
+      ),
+    },
+    {
+      accessorKey: "deliveredAt",
+      header: "Delivered At",
       cell: ({ row }) => (
         <div>
-          {new Date(row.getValue("updatedAt") as string).toLocaleString()}
+          {row.getValue("deliveredAt")
+            ? new Date(row.getValue("deliveredAt") as string).toLocaleString()
+            : "N/A"}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "confirmedAt",
+      header: "Confirmed At",
+      cell: ({ row }) => (
+        <div>
+          {row.getValue("confirmedAt")
+            ? new Date(row.getValue("confirmedAt") as string).toLocaleString()
+            : "N/A"}
         </div>
       ),
     },
@@ -80,7 +140,7 @@ export function CustomersTable() {
       enableHiding: false,
       size: 80,
       cell: ({ row }) => {
-        const user = row.original;
+        const order = row.original;
         return (
           <div className="flex items-center justify-center space-x-1">
             <Button
@@ -103,9 +163,9 @@ export function CustomersTable() {
     },
   ];
 
-  const [data, setData] = React.useState<userType[]>([]);
+  const [data, setData] = React.useState<orderType[]>([]);
   React.useEffect(() => {
-    fetchCustomers({ limit: 10 }).then((res) => {
+    fetchOrders({ limit: 10 }).then((res) => {
       setData(res);
     });
   }, []);
@@ -140,14 +200,7 @@ export function CustomersTable() {
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter Products..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <Input placeholder="Filter Products..." className="max-w-sm" />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

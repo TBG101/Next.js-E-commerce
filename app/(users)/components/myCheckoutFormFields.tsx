@@ -27,17 +27,14 @@ function MyCheckoutFormFields({
         }}
         validate={(value) => {
           if (!value) {
-            setError("This field is required");
             return "This field is required";
           }
           if (
             type === "email" &&
             !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)
           ) {
-            setError("Invalid email address");
             return "Invalid email address";
           }
-          setError("");
           return "";
         }}
         type={type}

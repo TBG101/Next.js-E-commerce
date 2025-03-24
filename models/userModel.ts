@@ -14,11 +14,12 @@ const userSchema = new mongoose.Schema(
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 10);
+    
   }
   next();
 });
 
 export type userType = InferSchemaType<typeof userSchema>;
 
-export const userModel =
+export const userModel: mongoose.Model<userType> =
   mongoose.models.User || mongoose.model<userType>("User", userSchema);

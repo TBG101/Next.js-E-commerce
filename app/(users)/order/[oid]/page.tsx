@@ -41,7 +41,7 @@ function OrderTracker() {
       }
       setLoading(false);
     })();
-  }, [status]);
+  }, [oid, session, status]);
 
   if (status === "loading") return <Loading />;
   else if (status === "authenticated")
@@ -106,35 +106,32 @@ function OrderTracker() {
                 Products
               </h2>
               <ul className="space-y-4 px-2">
-                {order.orderItems.map((item: OrderItem) => (
-                  <>
-                    <li
-                      key={item.name}
-                      className="flex items-center justify-between  rounded-md"
-                    >
-                      <div className="flex items-center space-x-4">
-                        <Image
-                          src={"/" + item.image}
-                          alt={item.name}
-                          width={82}
-                          height={82}
-                          className="rounded-sm object-cover"
-                        />
-                        <div>
-                          <p className="font-semibold text-gray-800">
-                            {item.name}
-                          </p>
-                          <p className="text-gray-600">
-                            Quantity: {item.quantity}
-                          </p>
-                        </div>
+                {order.orderItems.map((item: OrderItem, index) => (
+                  <li
+                    className="flex items-center justify-between  rounded-md pb-2"
+                    key={index}
+                  >
+                    <div className="flex items-center space-x-4">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        width={82}
+                        height={82}
+                        className="rounded-sm object-cover"
+                      />
+                      <div>
+                        <p className="font-semibold text-gray-800">
+                          {item.name}
+                        </p>
+                        <p className="text-gray-600">
+                          Quantity: {item.quantity}
+                        </p>
                       </div>
-                      <p className="font-semibold text-gray-800">
-                        ${item.price.toFixed(2)}
-                      </p>
-                    </li>
-                    <Divider />
-                  </>
+                    </div>
+                    <p className="font-semibold text-gray-800">
+                      ${item.price.toFixed(2)}
+                    </p>
+                  </li>
                 ))}
               </ul>
             </div>

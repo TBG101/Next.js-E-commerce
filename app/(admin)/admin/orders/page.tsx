@@ -1,12 +1,12 @@
-import React from 'react'
+import React from "react";
+import OrdersPage from "./components/ordersPage";
 
 function page() {
   return (
-    <main className='p-2'>
-      <div>page</div>
-
+    <main className="p-3">
+      <OrdersPage />
     </main>
-  )
+  );
 }
 
-export default page
+export default page;

@@ -24,7 +24,7 @@ function Product(product: ProductProps) {
     const items = localStorage.getItem("whislist") ?? "[]";
     const whislist = JSON.parse(items);
     setIsWhislisted(whislist.includes(product.data._id));
-  }, []);
+  }, [product.data._id]);
 
   const toggleWhislist = () => {
     const items = localStorage.getItem("whislist") ?? "[]";
