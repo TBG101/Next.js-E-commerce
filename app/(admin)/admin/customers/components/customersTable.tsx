@@ -34,51 +34,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Tooltip } from "@nextui-org/react";
 import { IoEyeOutline } from "react-icons/io5";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { userType } from "@/models/userModel";
 
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  sex: "Male" | "Female" | "Unisex";
-  stock: number;
-};
-
-const data: Product[] = [
-  {
-    id: "p1",
-    name: "Product 1",
-    price: 100,
-    sex: "Male",
-    stock: 50,
-  },
-  {
-    id: "p2",
-    name: "Product 2",
-    price: 200,
-    sex: "Male",
-    stock: 30,
-  },
-  {
-    id: "p3",
-    name: "Product 3",
-    price: 150,
-    sex: "Unisex",
-    stock: 20,
-  },
-  {
-    id: "p4",
-    name: "Product 4",
-    price: 250,
-    sex: "Female",
-    stock: 10,
-  },
-];
-
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<userType>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -129,7 +90,6 @@ export const columns: ColumnDef<Product>[] = [
             variant="ghost"
             size="icon"
             className="text-blue-500 hover:bg-blue-100"
-            onClick={() => console.log(`View product ${product.id}`)}
           >
             <IoEyeOutline size={16} />
           </Button>
@@ -137,7 +97,6 @@ export const columns: ColumnDef<Product>[] = [
             variant="ghost"
             size="icon"
             className="text-green-500 hover:bg-green-100"
-            onClick={() => console.log(`Edit product ${product.id}`)}
           >
             <FaRegEdit size={16} />
           </Button>
@@ -145,7 +104,6 @@ export const columns: ColumnDef<Product>[] = [
             variant="ghost"
             size="icon"
             className="text-red-500 hover:bg-red-100"
-            onClick={() => console.log(`Delete product ${product.id}`)}
           >
             <MdDelete size={16} />
           </Button>
@@ -155,7 +113,9 @@ export const columns: ColumnDef<Product>[] = [
   },
 ];
 
-export function ProductsTable() {
+export function CustomersTable() {
+  let data: userType[] = [];
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],

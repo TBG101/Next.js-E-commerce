@@ -7,7 +7,7 @@ import AddProducts from "./addProducts";
 function ProductsPage() {
   return (
     <>
-      <section className="flex flex-col p-2">
+      <section className="flex flex-col">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">View Products</h1>
           <div className="flex items-center space-x-2">

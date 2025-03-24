@@ -4,7 +4,7 @@ import { Divider } from "@nextui-org/react";
 
 async function page() {
   return (
-    <main className="p-2">
+    <main className="p-3">
       <ProductsPage />
     </main>
   );

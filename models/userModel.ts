@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema(
@@ -18,4 +18,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-export default mongoose.models.User || mongoose.model("User", userSchema);
+export type userType = InferSchemaType<typeof userSchema>;
+
+export const userModel =
+  mongoose.models.User || mongoose.model<userType>("User", userSchema);

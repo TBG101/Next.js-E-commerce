@@ -126,3 +126,4 @@ export async function createProduct(formdata: FormData) {
   else
     throw new Error(result.message);
 }
+
