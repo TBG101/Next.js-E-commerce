@@ -189,7 +189,6 @@ function Navbar() {
             <span className="hidden md:flex">
               <SearchInput />
             </span>
-
             <Dropdown>
               <DropdownTrigger>
                 <div className="relative cursor-pointer">
@@ -277,21 +276,35 @@ function Navbar() {
                 )}
               </DropdownMenu>
             </Dropdown>
-
-            <Dropdown>
-              <DropdownTrigger>
-                <div className="flex w-7 items-center justify-center transition-all duration-300 ease-in-out md:w-10">
-                  <Avatar
-                    as="button"
-                    className="bg-transparent transition-transform"
-                    name="Jason Hughes"
-                    size="sm"
-                    alt="image-avatar"
-                    fallback={<FaRegCircleUser size={24} color="#69707D" />}
-                  />
-                </div>
-              </DropdownTrigger>
-              {session && session.user && status === "authenticated" && (
+            {!session && (
+              <div className="flex w-7 items-center justify-center transition-all duration-300 ease-in-out md:w-10">
+                <Avatar
+                  as="button"
+                  className="bg-transparent transition-transform"
+                  name="Jason Hughes"
+                  size="sm"
+                  alt="image-avatar"
+                  onClick={() => {
+                    router.push("/login");
+                  }}
+                  fallback={<FaRegCircleUser size={24} color="#69707D" />}
+                />
+              </div>
+            )}
+            {session && session.user && status === "authenticated" && (
+              <Dropdown>
+                <DropdownTrigger>
+                  <div className="flex w-7 items-center justify-center transition-all duration-300 ease-in-out md:w-10">
+                    <Avatar
+                      as="button"
+                      className="bg-transparent transition-transform"
+                      name="Jason Hughes"
+                      size="sm"
+                      alt="image-avatar"
+                      fallback={<FaRegCircleUser size={24} color="#69707D" />}
+                    />
+                  </div>
+                </DropdownTrigger>
                 <DropdownMenu className="bg-none" variant="light">
                   <DropdownItem key="welcome" className="gap-2 pb-2">
                     <p className="tracking-widest">
@@ -315,30 +328,9 @@ function Navbar() {
                     </p>
                   </DropdownItem>
                 </DropdownMenu>
-              )}
-              {!session && (
-                <DropdownMenu className="bg-none" variant="light">
-                  <DropdownItem key={"login"}>
-                    <Link href={"/login"}>
-                      <Button className="w-full bg-primary-orange text-white">
-                        Login
-                      </Button>
-                    </Link>
-                  </DropdownItem>
-                  <DropdownItem key={"register"}>
-                    <Link href="/register">
-                      <Button className="w-full bg-primary-orange text-white">
-                        Sign up
-                      </Button>
-                    </Link>
-                  </DropdownItem>
-                </DropdownMenu>
-              )}
-            </Dropdown>
-            {/* <div className="hidden md:flex">
+              </Dropdown>
+            )}                              
 
-              <ThemeSwitcher />
-            </div> */}
           </NavbarContent>
           <NavbarMenu className="w-2/3 border-1 font-bold shadow-lg ">
             <span className="pt-[40px]">

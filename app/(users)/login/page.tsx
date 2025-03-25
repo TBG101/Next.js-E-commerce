@@ -97,6 +97,7 @@ export default function LoginPage() {
             disabled={loading || success}
             isLoading={loading || success}
             type="submit"
+
             color={success ? "success" : "primary"}
             className="rounded-md text-medium font-semibold tracking-wide text-neutral-50"
           >
@@ -117,7 +118,7 @@ export default function LoginPage() {
           "
           >
             {"Don't have an account? "}
-            <span className="font-medium text-primary-foreground ">
+            <span className="font-medium text-primary-orange ">
               Sign up here
             </span>{" "}
             🚀
