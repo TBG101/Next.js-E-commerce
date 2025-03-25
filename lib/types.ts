@@ -6,21 +6,22 @@ export interface CartItem {
   price: number;
   image: string;
   whishlist?: boolean;
-};
+}
 
 export interface CheckoutFields {
   name: string;
   email: string;
   address: string;
-  phone: string
+  phone: string;
   city: string;
   postalCode: string;
   country: string;
   paymentMethod: number; // 0 for cash on delivery, 1 for credit card
   cartItems: CartItem[];
-};
+}
 
 export interface OrderItem {
+  _id: string;
   name: string;
   quantity: number;
   image: string;
@@ -38,7 +39,7 @@ export interface ShippingAddress {
 
 export interface Order {
   _id: string;
-  user: string; // Assuming user is a reference to another model
+  user: string;
   orderItems: OrderItem[];
   shippingAddress: ShippingAddress;
   paymentMethod: number; // 0 for cash on delivery, 1 for credit card
@@ -53,3 +54,10 @@ export interface Order {
   updatedAt?: Date;
 }
 
+export interface userType {
+  _id: string;
+  email: string;
+  name: string;
+  role: string;
+  createdAt?: Date;
+}

@@ -7,13 +7,12 @@ if (!MONGODB_URI) {
   throw new Error('Please define MONGODB_URI environment variable');
 }
 
-// Type definition for connection cache
+
 interface MongooseCache {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
 }
 
-// Module-scoped cache (not using global)
 let cached: MongooseCache = {
   conn: null,
   promise: null,

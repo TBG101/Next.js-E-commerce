@@ -37,8 +37,8 @@ import {
 import { IoEyeOutline } from "react-icons/io5";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { userType } from "@/models/userModel";
 import { fetchCustomers } from "@/apiqueries/serverActions";
+import { userType } from "@/lib/types";
 
 export function CustomersTable() {
   const columns: ColumnDef<userType>[] = [
@@ -66,15 +66,15 @@ export function CustomersTable() {
         </div>
       ),
     },
-    {
-      accessorKey: "updatedAt",
-      header: "Updated At",
-      cell: ({ row }) => (
-        <div>
-          {new Date(row.getValue("updatedAt") as string).toLocaleString()}
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: "updatedAt",
+    //   header: "Updated At",
+    //   cell: ({ row }) => (
+    //     <div>
+    //       {new Date(row.getValue("updatedAt") as string).toLocaleString()}
+    //     </div>
+    //   ),
+    // },
     {
       id: "actions",
       enableHiding: false,

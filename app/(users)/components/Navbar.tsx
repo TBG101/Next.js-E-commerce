@@ -17,11 +17,8 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownSection,
-  Input,
-  Divider,
 } from "@nextui-org/react";
 import { useState, useContext } from "react";
-import { ThemeSwitcher } from "./ThemeSwitcher";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import SearchInput from "./SearchInput";

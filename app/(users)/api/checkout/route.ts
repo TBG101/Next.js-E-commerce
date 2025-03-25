@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/authUtils";
 import { getServerSession } from "next-auth/next";
 import { CheckoutFields } from "@/lib/types";
-import { orderModel } from "@/models/orderModel";
+import { OrderModel } from "@/models/orderModel";
 import Product from "@/models/productModel";
 import mongoose from "mongoose";
 
@@ -130,7 +130,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Invalid user ID" }, { status: 400 });
     }
 
-    const order = new orderModel({
+    const order = new OrderModel({
       user: session.user.id,
       paymentMethod: checkoutData.paymentMethod,
       shippingPrice: checkoutData.paymentMethod === 0 ? 0 : 7,
@@ -142,7 +142,7 @@ export async function POST(req: Request) {
         country: checkoutData.country,
       },
       orderItems: items,
-      totalPrice: totalPrice,
+      totalPrice: Number(totalPrice.toFixed(2)),
       isPaid: false,
       paidAt: null,
       isDelivered: false,

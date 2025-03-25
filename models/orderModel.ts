@@ -1,4 +1,6 @@
-import mongoose, { InferSchemaType } from "mongoose";
+import mongoose, { InferSchemaType, model } from "mongoose";
+
+
 
 const orderSchema = new mongoose.Schema(
   {
@@ -35,7 +37,8 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export type orderType = InferSchemaType<typeof orderSchema>;
+export type OrderType = InferSchemaType<typeof orderSchema> &
+  mongoose.Document & { _id: mongoose.Types.ObjectId };
 
-export const orderModel: mongoose.Model<orderType> =
-  mongoose.models.Order || mongoose.model<orderType>("Order", orderSchema);
+export const OrderModel =
+  mongoose.models.Order || model<OrderType>("Order", orderSchema);

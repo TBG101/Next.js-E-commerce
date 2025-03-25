@@ -39,28 +39,27 @@ import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { userType } from "@/models/userModel";
 import { fetchCustomers, fetchOrders } from "@/apiqueries/serverActions";
-import { orderType } from "@/models/orderModel";
+import { OrderType } from "@/models/orderModel";
+import { Order } from "@/lib/types";
 
 export function OrdersTable() {
-  const columns: ColumnDef<orderType>[] = [
+  const columns: ColumnDef<Order>[] = [
     {
       accessorKey: "user",
       header: "User",
       cell: ({ row }) => <div>name</div>,
     },
-    // {
-    //   accessorKey: "orderItems",
-    //   header: "Order Items",
-    //   cell: ({ row }) => (
-    //     <div>
-    //       {row.original.orderItems.map((item, index) => (
-    //         <div key={index}>
-    //           {item.name} (x{item.quantity})
-    //         </div>
-    //       ))}
-    //     </div>
-    //   ),
-    // },
+    {
+      accessorKey: "orderItems",
+      header: "Number of Items",
+      cell: ({ row }) => (
+        <div>
+          {row.original.orderItems.reduce((pv, cv, index) => {
+            return pv + cv.quantity;
+          }, 0).toString()}
+        </div>
+      ),
+    },
     {
       accessorKey: "shippingAddress",
       header: "Shipping Address",
@@ -78,7 +77,13 @@ export function OrdersTable() {
     {
       accessorKey: "paymentMethod",
       header: "Payment Method",
-      cell: ({ row }) => <div>{row.getValue("paymentMethod")}</div>,
+      cell: ({ row }) => (
+        <div>
+          {row.getValue("paymentMethod") === 0
+            ? "Cash On Delivery"
+            : "Credit Card"}
+        </div>
+      ),
     },
     {
       accessorKey: "shippingPrice",
@@ -88,7 +93,9 @@ export function OrdersTable() {
     {
       accessorKey: "totalPrice",
       header: "Total Price",
-      cell: ({ row }) => <div>${row.getValue("totalPrice")}</div>,
+      cell: ({ row }) => (
+        <div>${(row.getValue("totalPrice") as number).toFixed(2)}</div>
+      ),
     },
     {
       accessorKey: "isPaid",
@@ -163,10 +170,12 @@ export function OrdersTable() {
     },
   ];
 
-  const [data, setData] = React.useState<orderType[]>([]);
+  const [data, setData] = React.useState<Order[]>([]);
   React.useEffect(() => {
     fetchOrders({ limit: 10 }).then((res) => {
-      setData(res);
+      const data = res as Order[];
+      setData(data);
+      console.log(data);
     });
   }, []);
 
