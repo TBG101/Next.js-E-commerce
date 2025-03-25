@@ -2,8 +2,7 @@ import dbConnect from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authUtils";
 import { NextRequest, NextResponse } from "next/server";
-import { orderModel } from "@/models/orderModel";
-import { NextApiRequest } from "next";
+import { OrderModel } from "@/models/orderModel";
 
 export async function GET(
   req: Request,
@@ -17,7 +16,7 @@ export async function GET(
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  let order = await orderModel.findById(oid).exec();
+  let order = await OrderModel.findById(oid).exec();
 
   if (!order)
     return NextResponse.json({ message: "Order not found" }, { status: 404 });
