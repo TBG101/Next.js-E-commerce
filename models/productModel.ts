@@ -9,6 +9,8 @@ const productSchema = new Schema({
   thumbnails: { type: [String], required: true },
   sex: { type: String, required: true },
   discount: { type: Number, required: true },
+  bestSellers: { type: Boolean, required: true },
+  newArrivals: { type: Boolean, required: true },
 });
 
 export default models.Product || model("Product", productSchema);

@@ -20,17 +20,41 @@ export async function getProduct(slug: string) {
   return result;
 }
 
-export async function getProducts({ maxProducts, sex }: { maxProducts?: number, sex?: string } = {}) {
+export async function getProducts({
+  maxProducts,
+  sex,
+  bestSellers,
+  newArrivals,
+}: {
+  maxProducts?: number;
+  sex?: "male" | "female" | "unisex";
+  bestSellers?: boolean;
+  newArrivals?: boolean;
+} = {}) {
   try {
     let url = `/api/products`;
     const params = new URLSearchParams();
 
     if (maxProducts) {
-      params.append('maxProducts', maxProducts.toString());
+      params.append("maxProducts", maxProducts.toString());
     }
 
     if (sex) {
-      params.append('sex', sex);
+      // Only allow "male", "female", or "unisex"
+      if (["male", "female", "unisex"].includes(sex)) {
+        params.append("sex", sex);
+      } else {
+        throw new Error(
+          "Invalid value for sex. Allowed values are 'male', 'female', or 'unisex'.",
+        );
+      }
+    }
+
+    if (bestSellers) {
+      params.append("bestSellers", "true");
+    }
+    if (newArrivals) {
+      params.append("newArrivals", "true");
     }
 
     if (params.toString()) {
@@ -43,11 +67,11 @@ export async function getProducts({ maxProducts, sex }: { maxProducts?: number, 
     });
 
     const result = await res.json();
-    if (res.ok)
-      return result;
-    else { 
+    if (res.ok) return result;
+    else {
       console.error("Error in getProducts:", result);
-      return []; }
+      return [];
+    }
   } catch (error) {
     console.error("Error in getProducts:", error);
     return [];
@@ -62,42 +86,44 @@ export async function searchProducts(search: string) {
     cache: "no-cache",
   });
   const result = await res.json();
-  if (res.ok)
-    return result;
-  else
-    throw new Error(result.message);
+  if (res.ok) return result;
+  else throw new Error(result.message);
 }
 
-export async function registerAccount(email: string, password: string, name: string) {
-  const response = await fetch('/api/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+export async function registerAccount(
+  email: string,
+  password: string,
+  name: string,
+) {
+  const response = await fetch("/api/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password, name }),
   });
   const result = await response.json();
-  if (response.ok)
-    return result;
-  else
-    throw new Error(result.message);
+  if (response.ok) return result;
+  else throw new Error(result.message);
 }
 
 export async function sendCheckout(checkout: CheckoutFields) {
   try {
-    const response = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(checkout),
     });
 
     if (!response.ok) {
       const errorResult = await response.json();
-      throw new Error(errorResult.message || 'An error occurred during the checkout process.');
+      throw new Error(
+        errorResult.message || "An error occurred during the checkout process.",
+      );
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Error in sendCheckout:', error);
-    throw new Error('Failed to complete checkout. Please try again later.');
+    console.error("Error in sendCheckout:", error);
+    throw new Error("Failed to complete checkout. Please try again later.");
   }
 }
 
@@ -108,10 +134,8 @@ export async function getOrder(order_id: string) {
   });
 
   const result = await res.json();
-  if (res.ok)
-    return result;
-  else
-    throw new Error(result.message);
+  if (res.ok) return result;
+  else throw new Error(result.message);
 }
 
 export async function createProduct(formdata: FormData) {
@@ -121,9 +145,6 @@ export async function createProduct(formdata: FormData) {
     body: formdata,
   });
   const result = await res.json();
-  if (res.ok)
-    return result;
-  else
-    throw new Error(result.message);
+  if (res.ok) return result;
+  else throw new Error(result.message);
 }
-

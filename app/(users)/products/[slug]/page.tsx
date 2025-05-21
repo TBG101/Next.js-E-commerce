@@ -75,8 +75,8 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apidata = await getProduct(params.slug as string);
-        const currentPrice = apidata.price * apidata.discount;
+        const apidata = (await getProduct(params.slug as string)) as Product;
+        const currentPrice = (apidata.price * apidata.discount) / 100;
         console.log(apidata);
         setData({ ...apidata, currentPrice });
         setIsLoading(false);

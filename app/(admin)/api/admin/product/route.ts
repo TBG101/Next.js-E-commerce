@@ -21,6 +21,8 @@ interface productCreate {
   thumbnails: string[];
   sex: string;
   discount: number;
+  bestSellers?: boolean;
+  newArrivals?: boolean;
 }
 
 export async function POST(req: Request) {
@@ -37,6 +39,8 @@ export async function POST(req: Request) {
     thumbnails: [],
     sex: "",
     discount: 0,
+    bestSellers: false,
+    newArrivals: false,
   };
 
   const data = await req.formData();
@@ -45,6 +49,8 @@ export async function POST(req: Request) {
   product.description = (data.get("description") as string) || "";
   product.discount = parseInt(data.get("discount") as string) || 0;
   product.sex = data.get("sex") as string;
+  product.bestSellers = data.get("bestSellers") === "true";
+  product.newArrivals = data.get("newArrivals") === "true";
 
   if (product.price <= 0) {
     return NextResponse.json(
