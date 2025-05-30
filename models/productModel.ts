@@ -1,5 +1,4 @@
 import { Schema, model, models } from "mongoose";
-import mongoose from "mongoose";
 
 const productSchema = new Schema({
   name: { type: String, required: true },
@@ -9,8 +8,12 @@ const productSchema = new Schema({
   thumbnails: { type: [String], required: true },
   sex: { type: String, required: true },
   discount: { type: Number, required: true },
+  stock: { type: Number, required: true, default: 0 },
+  sizes: { type: [String], required: true },
   bestSellers: { type: Boolean, required: true },
   newArrivals: { type: Boolean, required: true },
+}, {
+  timestamps: true
 });
 
 export default models.Product || model("Product", productSchema);

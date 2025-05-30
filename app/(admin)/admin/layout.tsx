@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/authUtils";
 import { AppSidebar } from "@/app/(admin)/admin/components/navigation/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard Page - Glitz Gear",
@@ -40,14 +40,13 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
 
   return (
-    
-        <SidebarProvider>
-          <AppSidebar variant="floating" />
-          <SidebarInset>
-            <SiteHeader />
-            {children}
-          </SidebarInset>
-        </SidebarProvider>
-
+    <SidebarProvider>
+      <AppSidebar variant="floating" />
+      <SidebarInset>
+        <SiteHeader />
+        {children}
+      </SidebarInset>
+      <Toaster position="top-right" />
+    </SidebarProvider>
   );
 }

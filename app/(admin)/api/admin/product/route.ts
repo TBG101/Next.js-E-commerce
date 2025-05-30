@@ -21,6 +21,8 @@ interface productCreate {
   thumbnails: string[];
   sex: string;
   discount: number;
+  stock: number;
+  sizes: string[];
   bestSellers?: boolean;
   newArrivals?: boolean;
 }
@@ -39,6 +41,8 @@ export async function POST(req: Request) {
     thumbnails: [],
     sex: "",
     discount: 0,
+    stock: 0,
+    sizes: [],
     bestSellers: false,
     newArrivals: false,
   };
@@ -48,9 +52,24 @@ export async function POST(req: Request) {
   product.price = parseFloat(data.get("price") as string) || 0;
   product.description = (data.get("description") as string) || "";
   product.discount = parseInt(data.get("discount") as string) || 0;
+  product.stock = parseInt(data.get("stock") as string) || 0;
   product.sex = data.get("sex") as string;
   product.bestSellers = data.get("bestSellers") === "true";
   product.newArrivals = data.get("newArrivals") === "true";
+
+  // Handle sizes array
+  const sizesString = data.get("sizes") as string;
+  if (sizesString) {
+    product.sizes = sizesString.split(",");
+  }
+
+  // Validation
+  if (!product.name.trim()) {
+    return NextResponse.json(
+      { message: "Product name is required" },
+      { status: 400 },
+    );
+  }
 
   if (product.price <= 0) {
     return NextResponse.json(
@@ -59,9 +78,23 @@ export async function POST(req: Request) {
     );
   }
 
+  if (product.stock < 0) {
+    return NextResponse.json(
+      { message: "Stock cannot be negative" },
+      { status: 400 },
+    );
+  }
+
   if (product.discount < 0 || product.discount > 100) {
     return NextResponse.json(
       { message: "Discount must be between 0 and 100" },
+      { status: 400 },
+    );
+  }
+
+  if (!product.sex) {
+    return NextResponse.json(
+      { message: "Gender selection is required" },
       { status: 400 },
     );
   }
@@ -106,7 +139,66 @@ export async function POST(req: Request) {
     );
   }
 
-  return NextResponse.json({ message: "Product created" }, { status: 201 });
+  return NextResponse.json(
+    { message: "Product created successfully" },
+    { status: 201 },
+  );
+}
+
+export async function GET(req: Request) {
+  await dbConnect();
+  const session = await getServerSession(authOptions);
+  if (!session || session.user.role !== "admin")
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+  const url = new URL(req.url);
+  const page = parseInt(url.searchParams.get("page") || "1", 10);
+  const limit = parseInt(url.searchParams.get("limit") || "10", 10);
+  const search = url.searchParams.get("search") || "";
+
+  if (page <= 0 || limit <= 0) {
+    return NextResponse.json(
+      { message: "Page and limit must be positive integers" },
+      { status: 400 },
+    );
+  }
+
+  try {
+    // Build search query
+    const searchQuery = search
+      ? {
+          $or: [
+            { name: { $regex: search, $options: "i" } },
+            { description: { $regex: search, $options: "i" } },
+            { sex: { $regex: search, $options: "i" } },
+          ],
+        }
+      : {};
+
+    const totalProducts = await productModel.countDocuments(searchQuery);
+    const products = await productModel
+      .find(searchQuery)
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    return NextResponse.json(
+      {
+        products,
+        totalProducts,
+        totalPages: Math.ceil(totalProducts / limit),
+        currentPage: page,
+        searchQuery: search,
+      },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return NextResponse.json(
+      { message: "Error fetching products" },
+      { status: 500 },
+    );
+  }
 }
 
 async function uploadFile(

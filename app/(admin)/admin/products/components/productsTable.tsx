@@ -34,128 +34,141 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Tooltip } from "@nextui-org/react";
 import { IoEyeOutline } from "react-icons/io5";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  sex: "Male" | "Female" | "Unisex";
-  stock: number;
-};
-
-const data: Product[] = [
-  {
-    id: "p1",
-    name: "Product 1",
-    price: 100,
-    sex: "Male",
-    stock: 50,
-  },
-  {
-    id: "p2",
-    name: "Product 2",
-    price: 200,
-    sex: "Male",
-    stock: 30,
-  },
-  {
-    id: "p3",
-    name: "Product 3",
-    price: 150,
-    sex: "Unisex",
-    stock: 20,
-  },
-  {
-    id: "p4",
-    name: "Product 4",
-    price: 250,
-    sex: "Female",
-    stock: 10,
-  },
-];
-
-export const columns: ColumnDef<Product>[] = [
-  {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
-  },
-  {
-    accessorKey: "price",
-    header: "Price",
-    cell: ({ row }) => {
-      const price = parseFloat(row.getValue("price"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(price);
-      return <div>{formatted}</div>;
-    },
-  },
-  {
-    accessorKey: "sex",
-    header: "Sex",
-    cell: ({ row }) => <div>{row.getValue("sex")}</div>,
-  },
-
-  {
-    accessorKey: "stock",
-    header: "Stock",
-    cell: ({ row }) => <div>{row.getValue("stock")}</div>,
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    size: 80,
-    cell: ({ row }) => {
-      const product = row.original;
-      return (
-        <div className="flex items-center justify-center space-x-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-blue-500 hover:bg-blue-100"
-            onClick={() => console.log(`View product ${product.id}`)}
-          >
-            <IoEyeOutline size={16} />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-green-500 hover:bg-green-100"
-            onClick={() => console.log(`Edit product ${product.id}`)}
-          >
-            <FaRegEdit size={16} />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-red-500 hover:bg-red-100"
-            onClick={() => console.log(`Delete product ${product.id}`)}
-          >
-            <MdDelete size={16} />
-          </Button>
-        </div>
-      );
-    },
-  },
-];
+import { Product } from "@/models/Product";
+import { useRouter } from "next/navigation";
 
 export function ProductsTable() {
+  const [data, setData] = React.useState<Product[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [debouncedSearch, setDebouncedSearch] = React.useState("");
+  const router = useRouter();
+
+  const columns: ColumnDef<Product>[] = [
+    {
+      accessorKey: "name",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Name
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    },
+    {
+      accessorKey: "price",
+      header: "Price",
+      cell: ({ row }) => {
+        const price = parseFloat(row.getValue("price"));
+        const formatted = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+        }).format(price);
+        return <div>{formatted}</div>;
+      },
+    },
+    {
+      accessorKey: "sex",
+      header: "Sex",
+      cell: ({ row }) => <div>{row.getValue("sex")}</div>,
+    },
+
+    {
+      accessorKey: "stock",
+      header: "Stock",
+      cell: ({ row }) => <div>{row.getValue("stock")}</div>,
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      size: 80,
+      cell: ({ row }) => {
+        const product = row.original;
+        return (
+          <div className="flex items-center justify-center space-x-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-blue-500 hover:bg-blue-100"
+              onClick={() => console.log(`View product ${product._id}`)}
+            >
+              <IoEyeOutline size={16} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-green-500 hover:bg-green-100"
+              onClick={() => {
+                console.log(`Edit product ${product._id}`);
+                router.push(`/admin/products/edit/${product._id}`);
+              }}
+            >
+              <FaRegEdit size={16} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-red-500 hover:bg-red-100"
+              onClick={() => console.log(`Delete product ${product._id}`)}
+            >
+              <MdDelete size={16} />
+            </Button>
+          </div>
+        );
+      },
+    },
+  ];
+
+  // Debounce search query
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const searchParams = new URLSearchParams();
+        if (debouncedSearch) {
+          searchParams.append("search", debouncedSearch);
+        }
+
+        const response = await fetch(
+          `/api/admin/product?${searchParams.toString()}`,
+        );
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch products: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        setData(result.products || []);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch products",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [debouncedSearch]);
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -183,17 +196,38 @@ export function ProductsTable() {
     },
   });
 
+  if (loading) {
+    return (
+      <div className="w-full">
+        <div className="flex h-64 items-center justify-center">
+          <div className="text-lg">Loading products...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full">
+        <div className="flex h-64 items-center justify-center">
+          <div className="text-lg text-red-500">Error: {error}</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter Products..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
+          placeholder="Search products by name, description, or category..."
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
           className="max-w-sm"
         />
+        {loading && searchQuery && (
+          <div className="ml-2 text-sm text-muted-foreground">Searching...</div>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
