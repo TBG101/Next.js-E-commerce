@@ -71,12 +71,11 @@ export default function Page() {
   const paginate = (newDirection: number) => {
     setPage([page + newDirection, newDirection]);
   };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const apidata = (await getProduct(params.slug as string)) as Product;
-        const currentPrice = (apidata.price * apidata.discount) / 100;
+        const currentPrice = apidata.price * (1 - apidata.discount / 100);
         console.log(apidata);
         setData({ ...apidata, currentPrice });
         setIsLoading(false);
@@ -227,7 +226,7 @@ export default function Page() {
                     ${data?.currentPrice.toFixed(2)}
                   </div>
                   <div className="rounded-sm bg-primary-pale-orange px-2 text-small font-bold text-primary-orange">
-                    {data?.discount ? data.discount * 100 : 0}%
+                    {data?.discount ? data.discount : 0}%
                   </div>
                 </div>
                 <div className="flex items-center text-small font-bold text-neutral-dark-grayish-blue line-through">
