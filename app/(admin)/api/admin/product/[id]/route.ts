@@ -4,17 +4,18 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     await dbConnect();
-    
-    const product = await productModel.findById(params.id);
-    
+    const { id } = await params;
+
+    const product = await productModel.findById(id);
+
     if (!product) {
       return NextResponse.json(
         { success: false, message: "Product not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -26,40 +27,86 @@ export async function GET(
     console.error("Error fetching product:", error);
     return NextResponse.json(
       { success: false, message: "Failed to fetch product" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     await dbConnect();
-    
-    const body = await request.json();
-    const { name, description, price, stock, sex, category, images } = body;
+    const { id } = await params;
 
+    const body = await request.json();
+    const {
+      name,
+      description,
+      price,
+      stock,
+      sex,
+      discount,
+      sizes,
+      bestSellers,
+      newArrivals,
+      images,
+    } = body;
+
+    // Validation
+    if (!name || !description || !sex) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Name, description, and gender are required",
+        },
+        { status: 400 },
+      );
+    }
+
+    if (price <= 0) {
+      return NextResponse.json(
+        { success: false, message: "Price must be greater than zero" },
+        { status: 400 },
+      );
+    }
+
+    if (stock < 0) {
+      return NextResponse.json(
+        { success: false, message: "Stock cannot be negative" },
+        { status: 400 },
+      );
+    }
+
+    if (discount < 0 || discount > 100) {
+      return NextResponse.json(
+        { success: false, message: "Discount must be between 0 and 100" },
+        { status: 400 },
+      );
+    }
     const updatedProduct = await productModel.findByIdAndUpdate(
-      params.id,
+      id,
       {
         name,
         description,
         price,
         stock,
         sex,
-        category,
-        images,
+        discount: discount || 0,
+        sizes: sizes || [],
+        bestSellers: bestSellers || false,
+        newArrivals: newArrivals || false,
+        images: images || [],
         updatedAt: new Date(),
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!updatedProduct) {
       return NextResponse.json(
         { success: false, message: "Product not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -72,24 +119,25 @@ export async function PUT(
     console.error("Error updating product:", error);
     return NextResponse.json(
       { success: false, message: "Failed to update product" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     await dbConnect();
-    
-    const deletedProduct = await productModel.findByIdAndDelete(params.id);
-    
+    const { id } = await params;
+
+    const deletedProduct = await productModel.findByIdAndDelete(id);
+
     if (!deletedProduct) {
       return NextResponse.json(
         { success: false, message: "Product not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -101,7 +149,7 @@ export async function DELETE(
     console.error("Error deleting product:", error);
     return NextResponse.json(
       { success: false, message: "Failed to delete product" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

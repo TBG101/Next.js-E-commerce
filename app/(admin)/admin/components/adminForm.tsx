@@ -15,6 +15,10 @@ function AdminForm() {
     images: [] as File[],
     sex: "male",
     discount: "",
+    stock: "",
+    sizes: [] as string[],
+    bestSellers: false,
+    newArrivals: false,
   });
 
   const handleChange = (e: React.ChangeEvent<any>) => {
@@ -36,6 +40,10 @@ function AdminForm() {
     data.append("description", formData.description);
     data.append("sex", formData.sex);
     data.append("discount", formData.discount);
+    data.append("stock", formData.stock);
+    data.append("sizes", formData.sizes.join(","));
+    data.append("bestSellers", formData.bestSellers.toString());
+    data.append("newArrivals", formData.newArrivals.toString());
     formData.images.forEach((file) => data.append("images", file));
     try {
       const res = await createProduct(data);
@@ -46,6 +54,10 @@ function AdminForm() {
         images: [] as File[],
         sex: "male",
         discount: "",
+        stock: "",
+        sizes: [] as string[],
+        bestSellers: false,
+        newArrivals: false,
       });
       setLoading(false);
       setSuccess("Product added successfully");
@@ -58,7 +70,6 @@ function AdminForm() {
   return (
     <form className="flex flex-col gap-6 " onSubmit={handleSubmit}>
       <h2 className="text-xl font-semibold text-gray-800">Add New Product</h2>
-
       <div className="flex flex-col">
         <Input
           label="Product Title"
@@ -95,7 +106,6 @@ function AdminForm() {
           }}
         />
       </div>
-
       <div className="flex flex-col">
         <label htmlFor="price" className="text-sm font-medium text-gray-600">
           Price
@@ -113,7 +123,6 @@ function AdminForm() {
           }}
         />
       </div>
-
       <div className="flex flex-col">
         <label
           htmlFor="description"
@@ -142,7 +151,6 @@ function AdminForm() {
           required
         /> */}
       </div>
-
       <div className="flex flex-col">
         <label htmlFor="images" className="text-sm font-medium text-gray-600">
           Images
@@ -186,7 +194,6 @@ function AdminForm() {
           ))}
         </div>
       </div>
-
       <div className="flex flex-col">
         <label htmlFor="sex" className="text-sm font-medium text-gray-600">
           Sex
@@ -203,8 +210,7 @@ function AdminForm() {
           <option value="female">Female</option>
           <option value="unisex">Unisex</option>
         </select>
-      </div>
-
+      </div>{" "}
       <div className="flex flex-col">
         <label htmlFor="discount" className="text-sm font-medium text-gray-600">
           Discount
@@ -219,7 +225,87 @@ function AdminForm() {
           required
         />
       </div>
+      <div className="flex flex-col">
+        <label htmlFor="stock" className="text-sm font-medium text-gray-600">
+          Stock
+        </label>
+        <input
+          type="number"
+          id="stock"
+          name="stock"
+          className="mt-1 rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-400"
+          value={formData.stock}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="sizes" className="text-sm font-medium text-gray-600">
+          Sizes (comma-separated)
+        </label>
+        <input
+          type="text"
+          id="sizes"
+          name="sizes"
+          className="mt-1 rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-400"
+          value={formData.sizes.join(",")}
+          onChange={(e) => {
+            setFormData((prevData) => ({
+              ...prevData,
+              sizes: e.target.value
+                .split(",")
+                .map((size) => size.trim())
+                .filter((size) => size !== ""),
+            }));
+          }}
+          placeholder="S, M, L, XL"
+        />
+      </div>
+      <div className="flex gap-6">
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            id="bestSellers"
+            name="bestSellers"
+            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            checked={formData.bestSellers}
+            onChange={(e) => {
+              setFormData((prevData) => ({
+                ...prevData,
+                bestSellers: e.target.checked,
+              }));
+            }}
+          />
+          <label
+            htmlFor="bestSellers"
+            className="text-sm font-medium text-gray-600"
+          >
+            Best Seller
+          </label>
+        </div>
 
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            id="newArrivals"
+            name="newArrivals"
+            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            checked={formData.newArrivals}
+            onChange={(e) => {
+              setFormData((prevData) => ({
+                ...prevData,
+                newArrivals: e.target.checked,
+              }));
+            }}
+          />
+          <label
+            htmlFor="newArrivals"
+            className="text-sm font-medium text-gray-600"
+          >
+            New Arrival
+          </label>
+        </div>
+      </div>
       <Button
         isLoading={loading}
         color={success ? "success" : "primary"}
@@ -229,7 +315,6 @@ function AdminForm() {
       >
         {loading ? "Submitting..." : "Add Product"}
       </Button>
-
       {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
       {success && <p className="mt-2 text-sm text-green-500">{success}</p>}
     </form>

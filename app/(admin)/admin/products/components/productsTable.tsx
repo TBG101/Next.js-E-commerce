@@ -113,12 +113,36 @@ export function ProductsTable() {
               }}
             >
               <FaRegEdit size={16} />
-            </Button>
+            </Button>{" "}
             <Button
               variant="ghost"
               size="icon"
               className="text-red-500 hover:bg-red-100"
-              onClick={() => console.log(`Delete product ${product._id}`)}
+              onClick={async () => {
+                if (
+                  window.confirm(
+                    "Are you sure you want to delete this product?",
+                  )
+                ) {
+                  try {
+                    const response = await fetch(
+                      `/api/admin/product/${product._id}`,
+                      {
+                        method: "DELETE",
+                      },
+                    );
+
+                    if (response.ok) {
+                      // Refresh the data by triggering a re-fetch
+                      window.location.reload();
+                    } else {
+                      console.error("Failed to delete product");
+                    }
+                  } catch (error) {
+                    console.error("Error deleting product:", error);
+                  }
+                }
+              }}
             >
               <MdDelete size={16} />
             </Button>
